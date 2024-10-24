@@ -1,8 +1,9 @@
-module isty.iatic5.session_phase1 {
+module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
-    opens isty.iatic5.session_phase1 to javafx.fxml;
-    exports isty.iatic5.session_phase1;
+    opens com.example.demo to javafx.fxml;
+    exports com.example.demo;
 }
