@@ -171,12 +171,17 @@ public class ImplementationISessions implements ISessions {
             DBConnexion dbConnexion = new DBConnexion();
             connection = dbConnexion.getConnection();
 
-            // Requête pour supprimer une classe en fonction de son ID
-            String sql = "DELETE FROM Classe WHERE id = ?";
-            preparedStatement = connection.prepareStatement(sql);
+            // Pré-traitement : Suppression des sessions associées à cette classe
+            String deleteSessionsSql = "DELETE FROM Session WHERE id_classe = ?";
+            preparedStatement = connection.prepareStatement(deleteSessionsSql);
             preparedStatement.setInt(1, idClasse);
+            int sessionsDeleted = preparedStatement.executeUpdate();
+            System.out.println(sessionsDeleted + " sessions supprimées pour la classe avec ID " + idClasse);
 
-            // Exécution de la requête
+            // Requête SQL pour supprimer la classe
+            String deleteClasseSql = "DELETE FROM Classe WHERE id = ?";
+            preparedStatement = connection.prepareStatement(deleteClasseSql);
+            preparedStatement.setInt(1, idClasse);
             rowsAffected = preparedStatement.executeUpdate();
 
             // Vérification du succès de la suppression
