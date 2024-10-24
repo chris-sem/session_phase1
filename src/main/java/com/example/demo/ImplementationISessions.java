@@ -52,8 +52,17 @@ public class ImplementationISessions implements ISessions {
     public int deleteUE(int idUE) {    /////Works
         DBConnexion db = new DBConnexion();
         String sql = "DELETE FROM unite_enseignement WHERE id = ?";
+        String sqlDeleteSessions = "SELECT id FROM session WHERE id_ue = ?";
         int rowsAffected = 0;
         try {
+            db.initPrepar(sqlDeleteSessions);
+            db.getPstm().setInt(1, idUE);
+            ResultSet rs = db.executeSelect();
+            // 2. Boucler sur chaque session trouvée et appeler deleteSession
+            while (rs.next()) {
+                int idSession = rs.getInt("id");
+                deleteSession(idSession);  // Appel à la fonction de suppression de session
+            }
             db.initPrepar(sql);
             db.getPstm().setInt(1, idUE);
             rowsAffected = db.executeMaj();
@@ -110,9 +119,18 @@ public class ImplementationISessions implements ISessions {
     @Override
     public int deleteCreneau(int idCreneau) {
         DBConnexion db = new DBConnexion();
+        String sqlDeleteSessions = "SELECT id FROM session WHERE id_creneau = ?";
         String sql = "DELETE FROM creneau WHERE id = ?";
         int rowsAffected = 0;
         try {
+            db.initPrepar(sqlDeleteSessions);
+            db.getPstm().setInt(1, idCreneau);
+            ResultSet rs = db.executeSelect();
+            // 2. Boucler sur chaque session trouvée et appeler deleteSession
+            while (rs.next()) {
+                int idSession = rs.getInt("id");
+                deleteSession(idSession);  // Appel à la fonction de suppression de session
+            }
             db.initPrepar(sql);
             db.getPstm().setInt(1, idCreneau);
             rowsAffected = db.executeMaj();
