@@ -1,44 +1,28 @@
 package com.example.demo;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-
-public class HelloApplication extends Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
-    }
-
+public class HelloApplication {
     public static void main(String[] args) {
-        Classe c = new Classe(1,5, Classe.Specialite.MT);
-        c.displayClasse();
+        // Assuming ImplementationISessions is the class that contains createMultipleSessions
+        ImplementationISessions instance = new ImplementationISessions();
 
+        // Define the parameters for testing
+        String identifiant = "TestSession";
+        int idUE = 1;       // Use a valid idUE for your database
+        int idClasse = 2;   // Use a valid idClasse for your database
 
+        // List of idCreneau values for multiple time slots
+        List<Integer> idCreneau = new ArrayList<>();
+        idCreneau.add(1);  // Replace with actual idCreneau values that exist in your database
+        idCreneau.add(2);
+        idCreneau.add(3);
 
-        /*
-        DBConnexion db = new DBConnexion();
-        String sqlRequest = "SELECT * FROM sujet WHERE id = ?";
-        db.initPrepar(sqlRequest);
-        try {
-            db.getPstm().setInt(1, 2); //Met la valeur 2 dans le premier ?
-            ResultSet rs = db.executeSelect();
-            while(rs.next()){
-                System.out.println("ID : " + rs.getInt("id") + " Intitulé : " + rs.getString("Intitule"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        db.closeConnection();*/
+        // Call createMultipleSessions and store the result
+        int sessionsCreated = instance.createMultipleSessions(identifiant, idUE, idClasse, idCreneau);
+
+        // Print the number of successfully created sessions
+        System.out.println("Number of sessions successfully created: " + sessionsCreated);
     }
 }

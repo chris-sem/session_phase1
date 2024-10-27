@@ -19,7 +19,7 @@ public interface ISessions {
     public int deleteSession(int idSession); // Ne supprime pas les objets associés
     //Myriam Fin //
     // Houda debut //
-    public int updateSession(ObservableList<Session> sessionsAsupprimer, ObservableList<Session> sessionsAcreer);
+    public int updateSession(ObservableList<Integer> sessionsAsupprimer, ObservableList<String[]> sessionsAcreer);
     public int createMultipleSessions(String identifiant, int idUE, int idClasse, List<Integer> idCreneau); //Crée une session pour chaque créneau
     // Houda Fin //
     ////////////////////////////////////////////////////--------------Fonctions non éxigées--------------////////////////////////////////////////////////////

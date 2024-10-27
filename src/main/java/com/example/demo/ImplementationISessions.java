@@ -3,8 +3,13 @@ package com.example.demo;
 
 import javafx.collections.ObservableList;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ImplementationISessions implements ISessions {
 
@@ -38,24 +43,143 @@ public class ImplementationISessions implements ISessions {
         return 0;
     }
 
+    // Méthode createSession pour créer une session
     @Override
     public int createSession(String identifiant, int idUE, int idClasse, int idCreneau) {
-        return 0;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        int idSession = -1;
+
+        try {
+            // Création d'une instance de DBConnexion et ouverture de la connexion
+            DBConnexion dbConnexion = new DBConnexion();
+            connection = dbConnexion.getConnection();
+
+            // Requête pour insérer une nouvelle session
+            String sql = "INSERT INTO Session (identifiant, id_ue, id_classe, id_creneau) VALUES (?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, identifiant);
+            preparedStatement.setInt(2, idUE);
+            preparedStatement.setInt(3, idClasse);
+            preparedStatement.setInt(4, idCreneau);
+
+            // Exécution de la requête
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Récupération de l'ID généré
+            if (rowsAffected > 0) {
+                resultSet = preparedStatement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    idSession = resultSet.getInt(1); // Récupération de l'ID de la session
+                }
+            }
+
+            // Vérification et confirmation de la création de la session
+            if (idSession > 0) {
+                System.out.println("Session créée avec succès. ID: " + idSession);
+            } else {
+                System.out.println("Erreur lors de la création de la session.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Fermeture des ressources
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return idSession;
     }
 
+    // Méthode deleteSession pour supprimer une session en fonction de son ID
     @Override
     public int deleteSession(int idSession) {
-        return 0;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int rowsAffected = 0;
+
+        try {
+            // Création d'une instance de DBConnexion et ouverture de la connexion
+            DBConnexion dbConnexion = new DBConnexion();
+            connection = dbConnexion.getConnection();
+
+            // Requête SQL pour supprimer une session en fonction de son ID
+            String sql = "DELETE FROM Session WHERE id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, idSession);
+
+            // Exécution de la requête
+            rowsAffected = preparedStatement.executeUpdate();
+
+            // Vérification du succès de la suppression
+            if (rowsAffected > 0) {
+                System.out.println("Session avec ID " + idSession + " supprimée avec succès.");
+            } else {
+                System.out.println("Aucune session trouvée avec l'ID " + idSession + ".");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Fermeture des ressources
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return rowsAffected;
     }
 
+    //works
     @Override
-    public int updateSession(ObservableList<Session> sessionsAsupprimer, ObservableList<Session> sessionsAcreer) {
-        return 0;
+    public int updateSession(ObservableList<Integer> sessionsAsupprimer, ObservableList<String[]> sessionsAcreer) {
+        int resultat = 0;
+
+        // Supprimer les sessions dans sessionsAsupprimer
+        for (int idSession : sessionsAsupprimer) {
+            resultat += deleteSession(idSession); // Suppression et accumulation des résultats
+        }
+
+        // Créer les nouvelles sessions dans sessionsAcreer
+        for (String[] sessionData : sessionsAcreer) {
+            if (sessionData.length == 4) { // Vérifie que les informations de la session sont complètes
+                String identifiant = sessionData[0];
+                int idUE = Integer.parseInt(sessionData[1]);
+                int idClasse = Integer.parseInt(sessionData[2]);
+                int idCreneau = Integer.parseInt(sessionData[3]);
+                resultat += createSession(identifiant, idUE, idClasse, idCreneau); // Création de la session
+            } else {
+                System.out.println("Erreur: Données de session incomplètes pour " + Arrays.toString(sessionData));
+            }
+        }
+
+        return resultat;
     }
 
+
+    //works
     @Override
     public int createMultipleSessions(String identifiant, int idUE, int idClasse, List<Integer> idCreneau) {
-        return 0;
+        int sessionsCreated = 0;
+
+        for (int idC : idCreneau) {
+            int result = createSession(identifiant, idUE, idClasse, idC);
+            if (result > 0) {  // Assuming createSession returns a positive ID if successful
+                sessionsCreated++;
+            } else {
+                System.out.println("Erreur : impossible de créer la session pour le créneau " + idC);
+            }
+        }
+
+        return sessionsCreated;
     }
 
     @Override
