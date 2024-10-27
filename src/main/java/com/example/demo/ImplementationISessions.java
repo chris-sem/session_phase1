@@ -138,9 +138,8 @@ public class ImplementationISessions implements ISessions {
         return rowsAffected;
     }
 
-    //works
     @Override
-    public int updateSession(ObservableList<Integer> sessionsAsupprimer, ObservableList<String[]> sessionsAcreer) {
+    public int updateSession(ObservableList<Integer> sessionsAsupprimer, ObservableList<Session> sessionsAcreer) {
         int resultat = 0;
 
         // Supprimer les sessions dans sessionsAsupprimer
@@ -149,16 +148,13 @@ public class ImplementationISessions implements ISessions {
         }
 
         // Créer les nouvelles sessions dans sessionsAcreer
-        for (String[] sessionData : sessionsAcreer) {
-            if (sessionData.length == 4) { // Vérifie que les informations de la session sont complètes
-                String identifiant = sessionData[0];
-                int idUE = Integer.parseInt(sessionData[1]);
-                int idClasse = Integer.parseInt(sessionData[2]);
-                int idCreneau = Integer.parseInt(sessionData[3]);
-                resultat += createSession(identifiant, idUE, idClasse, idCreneau); // Création de la session
-            } else {
-                System.out.println("Erreur: Données de session incomplètes pour " + Arrays.toString(sessionData));
-            }
+        for (Session sessionData : sessionsAcreer) {
+            String identifiant = sessionData.getIdentifiant();
+            int idUE = sessionData.getUe().getIdUE();
+            int idClasse = sessionData.getClasse().getIdClasse();
+            int idCreneau = sessionData.getCreneau().getIdCreneau();
+            resultat += createSession(identifiant, idUE, idClasse, idCreneau); // Création de la session
+
         }
 
         return resultat;
