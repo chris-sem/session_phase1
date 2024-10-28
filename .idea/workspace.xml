@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isty/iatic5/session_phase1/View/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hello-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +48,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "develop__archi",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/semje/IdeaProjects/session_phase1",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -88,6 +88,7 @@
       <option name="presentableId" value="Default" />
       <updated>1729756510216</updated>
       <workItem from="1729756511272" duration="639000" />
+      <workItem from="1730141398476" duration="1017000" />
     </task>
     <servers />
   </component>
