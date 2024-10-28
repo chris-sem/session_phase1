@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isty/iatic5/session_phase1/View/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hello-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +47,7 @@
     "Application.HelloApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "develop__archi",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -65,6 +66,8 @@
       <recent name="isty.iatic5.session_phase1.Services" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\semje\IdeaProjects\session_phase1\src\main\resources\View" />
+      <recent name="C:\Users\semje\IdeaProjects\session_phase1\src\main\resources" />
       <recent name="C:\Users\semje\IdeaProjects\session_phase1\src\main\resources\isty\iatic5\session_phase1\View" />
     </key>
   </component>
