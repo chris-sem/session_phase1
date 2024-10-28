@@ -1,4 +1,4 @@
-package isty.iatic5.session_phase1;
+package isty.iatic5.session_phase1.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
