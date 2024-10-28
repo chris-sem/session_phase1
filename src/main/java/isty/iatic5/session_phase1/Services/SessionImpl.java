@@ -32,6 +32,9 @@ public class SessionImpl implements ISession {
 
     @Override
     public int deleteUE(int idUE) {
+        // Supprimer toutes les sessions associées à cette UE
+        deleteSessionsByColumn("id_ue", idUE);
+
         String sql = "DELETE FROM unite_enseignement WHERE id = ?";
         db.initPrepar(sql);
         try {
@@ -63,6 +66,9 @@ public class SessionImpl implements ISession {
 
     @Override
     public int deleteCreneau(int idCreneau) {
+        // Supprimer toutes les sessions associées à ce créneau
+        deleteSessionsByColumn("id_creneau", idCreneau);
+
         String sql = "DELETE FROM creneau WHERE id = ?";
         db.initPrepar(sql);
         try {
@@ -94,6 +100,9 @@ public class SessionImpl implements ISession {
 
     @Override
     public int deleteClasse(int idClasse) {
+        // Supprimer toutes les sessions associées à cette classe
+        deleteSessionsByColumn("id_classe", idClasse);
+
         String sql = "DELETE FROM classe WHERE id = ?";
         db.initPrepar(sql);
         try {
@@ -149,7 +158,6 @@ public class SessionImpl implements ISession {
         for (Session session : sessionsAcreer) {
             result += createSession(session.getIdentifiant(), session.getUe().getIdUE(), session.getClasse().getIdClasse(), session.getCreneau().getIdCreneau());
         }
-
         return result;
     }
 
@@ -249,9 +257,9 @@ public class SessionImpl implements ISession {
                         rs.getInt("id_ue"),
                         null, null,
                         rs.getInt("id_classe"),
-                        0, Classe.Specialite.MT, // Valeurs par défaut à remplacer par une requête
+                        0, Classe.Specialite.MT,
                         rs.getInt("id_creneau"),
-                        null, null // Valeurs par défaut à remplacer par une requête
+                        null, null
                 ));
             }
         } catch (Exception e) {
@@ -261,5 +269,19 @@ public class SessionImpl implements ISession {
         }
         return sessions;
     }
+
+    private void deleteSessionsByColumn(String columnName, int columnValue) {
+        String sql = "DELETE FROM session WHERE " + columnName + " = ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setInt(1, columnValue);
+            db.executeMaj();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+    }
 }
+
 
