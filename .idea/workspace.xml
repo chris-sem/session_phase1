@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/CreneauController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/CreneauController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/HelloApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,9 +49,9 @@
     "Application.HelloApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "noonman__dev",
+    "git-widget-placeholder": "sletter__feature",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/semje/IdeaProjects/session_phase1",
+    "last_opened_file_path": "C:/Users/oscar/Documents/marcPetit_projet/session_phase1",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -114,10 +112,22 @@
       <updated>1729756510216</updated>
       <workItem from="1729756511272" duration="639000" />
       <workItem from="1730141398476" duration="1429000" />
+      <workItem from="1730170994127" duration="15789000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/target/classes/module-info.class</url>
+          <line>10</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

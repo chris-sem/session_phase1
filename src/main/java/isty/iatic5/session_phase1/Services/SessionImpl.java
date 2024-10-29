@@ -116,6 +116,31 @@ public class SessionImpl implements ISession {
         }
     }
 
+    public List<UniteEnseignement> getAllUEs() {
+        String sql = "SELECT id, code, designation FROM unite_enseignement ORDER BY id";
+        List<UniteEnseignement> ueList = new ArrayList<>();
+        db.initPrepar(sql);
+
+        try {
+            ResultSet rs = db.executeSelect();
+            while (rs.next()) {
+                // Crée une instance de UniteEnseignement pour chaque ligne de résultat
+                UniteEnseignement ue = new UniteEnseignement(
+                        rs.getInt("id"),
+                        rs.getString("code"),
+                        rs.getString("designation")
+                );
+                ueList.add(ue); // Ajoute l'instance à la liste
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+
+        return ueList;
+    }
+
     @Override
     public int deleteUE(int idUE) {
         // Supprimer toutes les sessions associées à cette UE

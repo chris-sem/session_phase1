@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface ISession {
     public int createUE(String code, String designation);
+    public List<UniteEnseignement> getAllUEs();
     public int deleteUE(int idUE);
     public int createCreneau(LocalDateTime debut, LocalDateTime fin);
     public int deleteCreneau(int idCreneau);
