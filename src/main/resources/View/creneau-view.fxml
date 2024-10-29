@@ -58,7 +58,7 @@
     <HBox alignment="CENTER" prefHeight="0.0" prefWidth="820.0" spacing="10">
         <Button onAction="#semainePrecedente" text="Semaine précédente" />
         <Button onAction="#semaineSuivante" text="Semaine suivante" />
-        <Button onAction="#checkModifications" text="Appliquer">
+        <Button fx:id="checkModificationsButton" onAction="#checkModifications" text="Appliquer changements">
             <HBox.margin>
                 <Insets />
             </HBox.margin>

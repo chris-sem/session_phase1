@@ -6,11 +6,7 @@ import isty.iatic5.session_phase1.Services.SessionImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Callback;
 
 import java.time.LocalDate;
@@ -33,6 +29,9 @@ public class CreneauController {
 
     @FXML
     private Label dateRangeLabel;
+
+    @FXML
+    private Button checkModificationsButton;
 
     private ISession sessionInterface;
 
@@ -95,6 +94,8 @@ public class CreneauController {
                                     Creneau creneauExact = trouverCreneauExact(rowIndex, colIndex);
 
                                     if (creneauExact != null) {
+                                        checkModificationsButton.setDisable(false);
+
                                         if (!update) {
                                             // Mode sans update : gérer uniquement la liste "disponibilite"
                                             if (disponibilite.contains(creneauExact)) {
@@ -324,6 +325,10 @@ public class CreneauController {
         System.out.println("Éléments supprimés de disponibilite : " + elementsManquants_disponibilite);
         sessionInterface.deleteMultipleCreneaux(elementsManquants_disponibilite);
         System.out.println("\n");
+
+        checkModificationsButton.setDisable(true);
+
+        setupVariables(2, numero_semaine,  numero_annee);
     }
 
     // Méthode pour rafraîchir et mettre à jour les couleurs du tableau
