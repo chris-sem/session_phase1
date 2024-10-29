@@ -1,0 +1,104 @@
+warning: in the working copy of '.idea/workspace.xml', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/.idea/workspace.xml b/.idea/workspace.xml[m
+[1mindex 31b2349..6abc6fb 100644[m
+[1m--- a/.idea/workspace.xml[m
+[1m+++ b/.idea/workspace.xml[m
+[36m@@ -6,9 +6,7 @@[m
+   <component name="ChangeListManager">[m
+     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">[m
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />[m
+[31m-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/HelloApplication.java" afterDir="false" />[m
+[31m-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" afterDir="false" />[m
+[31m-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" afterDir="false" />[m
+[32m+[m[32m      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java" afterDir="false" />[m
+     </list>[m
+     <option name="SHOW_DIALOG" value="false" />[m
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />[m
+[36m@@ -112,7 +110,7 @@[m
+       <updated>1729756510216</updated>[m
+       <workItem from="1729756511272" duration="639000" />[m
+       <workItem from="1730141398476" duration="1429000" />[m
+[31m-      <workItem from="1730170994127" duration="15789000" />[m
+[32m+[m[32m      <workItem from="1730170994127" duration="18541000" />[m
+     </task>[m
+     <servers />[m
+   </component>[m
+[1mdiff --git a/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java b/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java[m
+[1mindex 966114c..0fbc454 100644[m
+[1m--- a/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java[m
+[1m+++ b/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java[m
+[36m@@ -67,22 +67,40 @@[m [mpublic class UEController {[m
+         }[m
+     }[m
+ [m
+[31m-    // Méthode pour supprimer l'UE sélectionnée[m
+[32m+[m[32m    // Méthode pour supprimer l'UE sélectionnée avec une demande deconfirmation[m
+     @FXML[m
+     private void deleteUE() {[m
+         // Récupération de l'UE sélectionnée[m
+         UniteEnseignement selectedUE = ueTableView.getSelectionModel().getSelectedItem();[m
+ [m
+         if (selectedUE != null) {[m
+[31m-            // Appel de la méthode deleteUE pour supprimer de la base de données[m
+[31m-            int result = sessionService.deleteUE(selectedUE.getIdUE());[m
+[31m-[m
+[31m-            if (result > 0) {[m
+[31m-                ueList.remove(selectedUE); // Supprime de la liste observable pour actualiser la table[m
+[31m-                showAlert("Succès", "Unité d'Enseignement supprimée avec succès !");[m
+[31m-            } else {[m
+[31m-                showAlert("Erreur", "Échec de la suppression de l'Unité d'Enseignement.");[m
+[31m-            }[m
+[32m+[m[32m            // Création de l'alerte de confirmation[m
+[32m+[m[32m            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);[m
+[32m+[m[32m            confirmationAlert.setTitle("Confirmation de suppression");[m
+[32m+[m[32m            confirmationAlert.setHeaderText("Vous êtes sur le point de supprimer l'Unité d'Enseignement suivante :");[m
+[32m+[m[32m            confirmationAlert.setContentText("Code: " + selectedUE.getCode() + "\nDésignation: " + selectedUE.getDesignation());[m
+[32m+[m
+[32m+[m[32m            // Ajout des boutons "OK" et "Annuler" dans l'alerte[m
+[32m+[m[32m            ButtonType buttonTypeOK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);[m
+[32m+[m[32m            ButtonType buttonTypeCancel = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);[m
+[32m+[m[32m            confirmationAlert.getButtonTypes().setAll(buttonTypeOK, buttonTypeCancel);[m
+[32m+[m
+[32m+[m[32m            // Afficher l'alerte et attendre la réponse de l'utilisateur[m
+[32m+[m[32m            confirmationAlert.showAndWait().ifPresent(response -> {[m
+[32m+[m[32m                if (response == buttonTypeOK) {[m
+[32m+[m[32m                    // Si l'utilisateur confirme, on procède à la suppression[m
+[32m+[m[32m                    int result = sessionService.deleteUE(selectedUE.getIdUE());[m
+[32m+[m
+[32m+[m[32m                    if (result > 0) {[m
+[32m+[m[32m                        ueList.remove(selectedUE); // Supprime de la liste observable pour actualiser la table[m
+[32m+[m[32m                        showAlert("Succès", "Unité d'Enseignement supprimée avec succès !");[m
+[32m+[m[32m                    } else {[m
+[32m+[m[32m                        showAlert("Erreur", "Échec de la suppression de l'Unité d'Enseignement.");[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                } else {[m
+[32m+[m[32m                    showAlert("Info", "Suppression annulée.");[m
+[32m+[m[32m                }[m
+[32m+[m[32m            });[m
+         } else {[m
+             showAlert("Erreur", "Veuillez sélectionner une Unité d'Enseignement à supprimer.");[m
+         }[m
+[36m@@ -90,6 +108,7 @@[m [mpublic class UEController {[m
+ [m
+     // Méthode pour initialiser le TableView i.e lier les colonnes aux attributs de UniteEnseignement[m
+     @FXML[m
+[32m+[m
+     public void initialize() {[m
+         // Configuration des colonnes de la TableView[m
+         idColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getIdUE()));[m
+[36m@@ -98,6 +117,15 @@[m [mpublic class UEController {[m
+ [m
+         // Chargement initial des données[m
+         loadUEData();[m
+[32m+[m
+[32m+[m[32m        // Ajout d'un listener pour détecter le changement de sélection[m
+[32m+[m[32m        ueTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {[m
+[32m+[m[32m            if (newValue != null) {[m
+[32m+[m[32m                // Met à jour les champs de saisie avec les valeurs de la ligne sélectionnée[m
+[32m+[m[32m                code.setText(newValue.getCode());[m
+[32m+[m[32m                designation.setText(newValue.getDesignation());[m
+[32m+[m[32m            }[m
+[32m+[m[32m        });[m
+     }[m
+ [m
+     // Méthode pour charger les UE et les afficher dans le TableView[m

@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/HelloApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/UEController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +110,7 @@
       <updated>1729756510216</updated>
       <workItem from="1729756511272" duration="639000" />
       <workItem from="1730141398476" duration="1429000" />
-      <workItem from="1730170994127" duration="15789000" />
+      <workItem from="1730170994127" duration="18541000" />
     </task>
     <servers />
   </component>

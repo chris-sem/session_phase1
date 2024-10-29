@@ -67,22 +67,40 @@ public class UEController {
         }
     }
 
-    // Méthode pour supprimer l'UE sélectionnée
+    // Méthode pour supprimer l'UE sélectionnée avec une demande deconfirmation
     @FXML
     private void deleteUE() {
         // Récupération de l'UE sélectionnée
         UniteEnseignement selectedUE = ueTableView.getSelectionModel().getSelectedItem();
 
         if (selectedUE != null) {
-            // Appel de la méthode deleteUE pour supprimer de la base de données
-            int result = sessionService.deleteUE(selectedUE.getIdUE());
+            // Création de l'alerte de confirmation
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirmation de suppression");
+            confirmationAlert.setHeaderText("Vous êtes sur le point de supprimer l'Unité d'Enseignement suivante :");
+            confirmationAlert.setContentText("Code: " + selectedUE.getCode() + "\nDésignation: " + selectedUE.getDesignation());
 
-            if (result > 0) {
-                ueList.remove(selectedUE); // Supprime de la liste observable pour actualiser la table
-                showAlert("Succès", "Unité d'Enseignement supprimée avec succès !");
-            } else {
-                showAlert("Erreur", "Échec de la suppression de l'Unité d'Enseignement.");
-            }
+            // Ajout des boutons "OK" et "Annuler" dans l'alerte
+            ButtonType buttonTypeOK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            ButtonType buttonTypeCancel = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+            confirmationAlert.getButtonTypes().setAll(buttonTypeOK, buttonTypeCancel);
+
+            // Afficher l'alerte et attendre la réponse de l'utilisateur
+            confirmationAlert.showAndWait().ifPresent(response -> {
+                if (response == buttonTypeOK) {
+                    // Si l'utilisateur confirme, on procède à la suppression
+                    int result = sessionService.deleteUE(selectedUE.getIdUE());
+
+                    if (result > 0) {
+                        ueList.remove(selectedUE); // Supprime de la liste observable pour actualiser la table
+                        showAlert("Succès", "Unité d'Enseignement supprimée avec succès !");
+                    } else {
+                        showAlert("Erreur", "Échec de la suppression de l'Unité d'Enseignement.");
+                    }
+                } else {
+                    showAlert("Info", "Suppression annulée.");
+                }
+            });
         } else {
             showAlert("Erreur", "Veuillez sélectionner une Unité d'Enseignement à supprimer.");
         }
@@ -90,6 +108,7 @@ public class UEController {
 
     // Méthode pour initialiser le TableView i.e lier les colonnes aux attributs de UniteEnseignement
     @FXML
+
     public void initialize() {
         // Configuration des colonnes de la TableView
         idColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getIdUE()));
@@ -98,6 +117,15 @@ public class UEController {
 
         // Chargement initial des données
         loadUEData();
+
+        // Ajout d'un listener pour détecter le changement de sélection
+        ueTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                // Met à jour les champs de saisie avec les valeurs de la ligne sélectionnée
+                code.setText(newValue.getCode());
+                designation.setText(newValue.getDesignation());
+            }
+        });
     }
 
     // Méthode pour charger les UE et les afficher dans le TableView
