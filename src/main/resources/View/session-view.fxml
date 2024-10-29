@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.SessionController">
+    <VBox minHeight="1" maxHeight="1"/>
+    <HBox alignment="CENTER" spacing="10">
+        <Button fx:id="ueButton" onAction="#afficherUE" text="UE v " />
+        <Button fx:id="classButton" onAction="#afficherClasses" text="Classe v " />
+    </HBox>
+
+    <ListView fx:id="listView" prefHeight="200" prefWidth="300"/>
+</VBox>
+
