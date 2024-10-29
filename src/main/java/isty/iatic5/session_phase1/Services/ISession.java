@@ -25,4 +25,9 @@ public interface ISession {
     public ObservableList<Classe> getClasse();
     public ObservableList<Creneau> getCreneau();
     public ObservableList<Session> getSession();
+
+    public LocalDateTime getMinDebutCreneau();
+    public List<Creneau> getCreneauxEntreDates(LocalDateTime dateDebut, LocalDateTime dateFin);
+    public int createMultipleCreneaux(List<Creneau> creneaux);
+    public int deleteMultipleCreneaux(List<Creneau> creneaux);
 }
