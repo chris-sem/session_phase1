@@ -1,6 +1,8 @@
 package isty.iatic5.session_phase1.Controller;
 
 import isty.iatic5.session_phase1.Model.Creneau;
+import isty.iatic5.session_phase1.Services.ISession;
+import isty.iatic5.session_phase1.Services.SessionImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -32,6 +34,8 @@ public class CreneauController {
     @FXML
     private Label dateRangeLabel;
 
+    private ISession sessionInterface;
+
     private int numero_semaine;  // Contient le numéro de la semaine
     private int numero_annee;    // Contient l'année
 
@@ -52,48 +56,18 @@ public class CreneauController {
     @FXML
     private void initialize() {
 
+        sessionInterface = new SessionImpl();
+
         double tableWidth = 630.0; // Largeur totale souhaitée pour la TableView (correspondant à 7 colonnes)
         double columnWidth = tableWidth / 7;
 
         update = false;
-        // Initialisation des valeurs de semaine et année
-        numero_semaine = 10;  // Valeur par défaut
-        numero_annee = 2024;  // Valeur par défaut
 
-        datePivot = LocalDate.now();
-
-        // Calculer les valeurs de semaine, année, et premier lundi basé sur la date pivot
-        calculerDateSemaine(datePivot);
+        setupVariables(0, 0, 0);
 
         // Synchroniser les champs avec les valeurs par défaut
         numeroSemaineField.setText(String.valueOf(numero_semaine));
         numeroAnneeField.setText(String.valueOf(numero_annee));
-
-        // Mise à jour du label dynamique pour les dates de la semaine
-        updateDateRangeLabel();
-
-        // Initialisation des listes avec des créneaux
-        disponibilite = new ArrayList<>(List.of(
-                new Creneau(1, LocalDateTime.of(2024, 3, 4, 7, 0), LocalDateTime.of(2024, 3, 4, 8, 0)),
-                new Creneau(2, LocalDateTime.of(2024, 3, 4, 8, 0), LocalDateTime.of(2024, 3, 4, 9, 0)),
-                new Creneau(3, LocalDateTime.of(2024, 3, 5, 7, 0), LocalDateTime.of(2024, 3, 5, 8, 0))
-        ));
-
-        dejaPris = new ArrayList<>(List.of(
-                new Creneau(4, LocalDateTime.of(2024, 3, 6, 7, 0), LocalDateTime.of(2024, 3, 6, 8, 0)),
-                new Creneau(5, LocalDateTime.of(2024, 3, 6, 8, 0), LocalDateTime.of(2024, 3, 6, 9, 0)),
-                new Creneau(6, LocalDateTime.of(2024, 3, 6, 9, 0), LocalDateTime.of(2024, 3, 6, 10, 0))
-        ));
-
-        // Initialisation des copies initiales de disponibilite et dejaPris
-        disponibiliteInitial = new ArrayList<>(disponibilite);
-        dejaPrisInitial = new ArrayList<>(dejaPris);
-
-        // Initialisation des listes de modifications
-        nouveauxElements_dejaPris = new ArrayList<>();
-        elementsManquants_dejaPris = new ArrayList<>();
-        nouveauxElements_disponibilite = new ArrayList<>();
-        elementsManquants_disponibilite = new ArrayList<>();
 
         // Désactiver la sélection de ligne complète
         tableView.getSelectionModel().setCellSelectionEnabled(true);
@@ -185,6 +159,69 @@ public class CreneauController {
         tableView.setItems(data);
     }
 
+    private void setupVariables(int semaineOffset, int numSemaine, int numAnnee) {
+        // Déterminer la date pivot en fonction des paramètres
+        if (semaineOffset == 0) {
+            datePivot = sessionInterface.getMinDebutCreneau().toLocalDate() ;
+            //datePivot = LocalDateTime.of(2024, 10, 1, 8, 0, 0).toLocalDate();
+        } else if (semaineOffset == -1) {
+            datePivot = premierLundiDeLaSemaine.minusWeeks(1);  // Lundi de la semaine passée
+        } else if (semaineOffset == 1) {
+            datePivot = premierLundiDeLaSemaine.plusWeeks(1);   // Lundi de la semaine prochaine
+        } else if (semaineOffset == 2) {
+            // Utiliser numSemaine et numAnnee pour définir la date pivot
+            datePivot = getLundiDeSemaine(numSemaine, numAnnee);
+        } else {
+            throw new IllegalArgumentException("Valeur de semaineOffset invalide. Utilisez -1, 0, 1, ou 2.");
+        }
+
+        // Calcul des valeurs de semaine, année, et premier lundi basé sur la date pivot
+        calculerDateSemaine(datePivot);
+
+        // Mise à jour du label dynamique pour les dates de la semaine
+        updateDateRangeLabel();
+
+        // Initialisation des listes de créneaux en fonction de l'état de 'update'
+        if (!update) {
+            // Si 'update' est faux, récupérer uniquement la liste 'disponibilite'
+            disponibilite = sessionInterface.getCreneauxEntreDates(premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59)); // Méthode pour charger uniquement disponibilite
+            //disponibilite = new ArrayList<>(List.of(
+            //        new Creneau(1, LocalDateTime.of(2024, 3, 4, 7, 0), LocalDateTime.of(2024, 3, 4, 8, 0)),
+            //        new Creneau(2, LocalDateTime.of(2024, 3, 4, 8, 0), LocalDateTime.of(2024, 3, 4, 9, 0)),
+            //        new Creneau(3, LocalDateTime.of(2024, 3, 5, 7, 0), LocalDateTime.of(2024, 3, 5, 8, 0))
+            //));
+            dejaPris = new ArrayList<>();             // Laisser 'dejaPris' vide si 'update' est faux
+        } else {
+            // Si 'update' est vrai, récupérer les deux listes 'disponibilite' et 'dejaPris'
+            //disponibilite = getListeDisponibilite();
+            //dejaPris = getListeDejaPris();  // Méthode pour charger la liste 'dejaPris' si 'update' est vrai
+
+            // Initialisation des listes avec des créneaux
+            disponibilite = new ArrayList<>(List.of(
+                    new Creneau(1, LocalDateTime.of(2024, 3, 4, 7, 0), LocalDateTime.of(2024, 3, 4, 8, 0)),
+                    new Creneau(2, LocalDateTime.of(2024, 3, 4, 8, 0), LocalDateTime.of(2024, 3, 4, 9, 0)),
+                    new Creneau(3, LocalDateTime.of(2024, 3, 5, 7, 0), LocalDateTime.of(2024, 3, 5, 8, 0))
+            ));
+
+            dejaPris = new ArrayList<>(List.of(
+                    new Creneau(4, LocalDateTime.of(2024, 3, 6, 7, 0), LocalDateTime.of(2024, 3, 6, 8, 0)),
+                    new Creneau(5, LocalDateTime.of(2024, 3, 6, 8, 0), LocalDateTime.of(2024, 3, 6, 9, 0)),
+                    new Creneau(6, LocalDateTime.of(2024, 3, 6, 9, 0), LocalDateTime.of(2024, 3, 6, 10, 0))
+            ));
+        }
+
+        // Création des copies initiales pour le suivi des modifications
+        disponibiliteInitial = new ArrayList<>(disponibilite);
+        dejaPrisInitial = new ArrayList<>(dejaPris);
+
+        // Initialisation des listes de modifications
+        nouveauxElements_dejaPris = new ArrayList<>();
+        elementsManquants_dejaPris = new ArrayList<>();
+        nouveauxElements_disponibilite = new ArrayList<>();
+        elementsManquants_disponibilite = new ArrayList<>();
+    }
+
+
     /**
      * Méthode pour mettre à jour le label avec les dates de début et de fin de la semaine.
      * Utilise les valeurs de numero_semaine et numero_annee pour déterminer les dates.
@@ -203,16 +240,37 @@ public class CreneauController {
         }
     }
 
+    private void mettreAJourEntetesDeColonnes() {
+        for (int col = 0; col < 7; col++) {
+            // Mettre à jour l'en-tête de la colonne en appelant `getNomJourAvecNumero()`
+            TableColumn<String[], String> tableColumn = (TableColumn<String[], String>) tableView.getColumns().get(col);
+            tableColumn.setText(getNomJourAvecNumero(col + 1));
+        }
+    }
+
     // Méthode appelée par le bouton "Semaine précédente"
     @FXML
     private void semainePrecedente() {
         // Logique pour accéder à la semaine précédente (à implémenter)
+        // Appeler setupVariables avec -1 pour passer à la semaine précédente
+        setupVariables(-1, 0, 0);
+
+        mettreAJourEntetesDeColonnes();
+        // Mettre à jour le contenu de la TableView
+        updateTableColors();
     }
 
     // Méthode appelée par le bouton "Semaine suivante"
     @FXML
     private void semaineSuivante() {
         // Logique pour accéder à la semaine suivante (à implémenter)
+        // Appeler setupVariables avec -1 pour passer à la semaine précédente
+        setupVariables(1, 0, 0);
+
+        mettreAJourEntetesDeColonnes();
+
+        // Mettre à jour le contenu de la TableView
+        updateTableColors();
     }
 
     // Méthode appelée par le bouton "Afficher modification"
@@ -259,8 +317,12 @@ public class CreneauController {
         // Afficher l'état des listes de modifications dans la console
         System.out.println("Éléments ajoutés dans dejaPris : " + nouveauxElements_dejaPris);
         System.out.println("Éléments supprimés de dejaPris : " + elementsManquants_dejaPris);
+
+        //Supprimer ce qu'il y'a a supprimer et ajouter ce qu'il y a a ajouter
         System.out.println("Éléments ajoutés dans disponibilite : " + nouveauxElements_disponibilite);
+        sessionInterface.createMultipleCreneaux(nouveauxElements_disponibilite);
         System.out.println("Éléments supprimés de disponibilite : " + elementsManquants_disponibilite);
+        sessionInterface.deleteMultipleCreneaux(elementsManquants_disponibilite);
         System.out.println("\n");
     }
 
@@ -361,12 +423,17 @@ public class CreneauController {
             numero_semaine = Integer.parseInt(numeroSemaineField.getText());
             numero_annee = Integer.parseInt(numeroAnneeField.getText());
 
-            // Mettre à jour la date pivot à partir du numéro de semaine et de l'année
-            datePivot = getLundiDeSemaine(numero_semaine, numero_annee);
+            setupVariables(1, numero_semaine, numero_annee);
+
             premierLundiDeLaSemaine = datePivot;
+
+            mettreAJourEntetesDeColonnes();
 
             // Mettre à jour le label avec les vraies dates de lundi et dimanche
             updateDateRangeLabel();
+
+            // Mettre à jour le contenu de la TableView
+            updateTableColors();
         } catch (NumberFormatException e) {
             // Afficher un message d'erreur dans le label en cas d'erreur de format
             dateRangeLabel.setText("Erreur : veuillez entrer un numéro de semaine et une année valides.");

@@ -8,11 +8,97 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
 public class SessionImpl implements ISession {
     private DBConnexion db = new DBConnexion();
+
+    @Override
+    public int createMultipleCreneaux(List<Creneau> creneaux) {
+        int result = 0;
+        String sql = "INSERT INTO creneau (debut, fin) VALUES (?, ?)";
+        try {
+            db.initPrepar(sql);
+            for (Creneau creneau : creneaux) {
+                db.getPstm().setObject(1, creneau.getDebut());
+                db.getPstm().setObject(2, creneau.getFin());
+                result += db.executeMaj();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return result;
+    }
+
+    @Override
+    public int deleteMultipleCreneaux(List<Creneau> creneaux) {
+        int result = 0;
+        String deleteCreneauSql = "DELETE FROM creneau WHERE id = ?";
+
+        try {
+            for (Creneau creneau : creneaux) {
+                // Supprimer toutes les sessions associées à ce créneau
+                deleteSessionsByColumn("id_creneau", creneau.getIdCreneau());
+
+                // Supprimer le créneau lui-même
+                db.initPrepar(deleteCreneauSql);
+                db.getPstm().setInt(1, creneau.getIdCreneau());
+                result += db.executeMaj();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Creneau> getCreneauxEntreDates(LocalDateTime dateDebut, LocalDateTime dateFin) {
+        List<Creneau> creneaux = new ArrayList<>();
+        String sql = "SELECT * FROM creneau WHERE debut >= ? AND debut <= ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setObject(1, dateDebut);
+            db.getPstm().setObject(2, dateFin);
+            ResultSet rs = db.executeSelect();
+            while (rs.next()) {
+                creneaux.add(new Creneau(
+                        rs.getInt("id"),
+                        rs.getTimestamp("debut").toLocalDateTime(),
+                        rs.getTimestamp("fin").toLocalDateTime()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return creneaux;
+    }
+
+    @Override
+    public LocalDateTime getMinDebutCreneau() {
+        LocalDateTime minDebut = null;
+        String sql = "SELECT MIN(debut) AS min_debut FROM creneau";
+        db.initPrepar(sql);
+        try {
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                minDebut = rs.getTimestamp("min_debut").toLocalDateTime();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return minDebut;
+    }
 
     @Override
     public int createUE(String code, String designation) {
