@@ -8,11 +8,97 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
 public class SessionImpl implements ISession {
     private DBConnexion db = new DBConnexion();
+
+    @Override
+    public int createMultipleCreneaux(List<Creneau> creneaux) {
+        int result = 0;
+        String sql = "INSERT INTO creneau (debut, fin) VALUES (?, ?)";
+        try {
+            db.initPrepar(sql);
+            for (Creneau creneau : creneaux) {
+                db.getPstm().setObject(1, creneau.getDebut());
+                db.getPstm().setObject(2, creneau.getFin());
+                result += db.executeMaj();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return result;
+    }
+
+    @Override
+    public int deleteMultipleCreneaux(List<Creneau> creneaux) {
+        int result = 0;
+        String deleteCreneauSql = "DELETE FROM creneau WHERE id = ?";
+
+        try {
+            for (Creneau creneau : creneaux) {
+                // Supprimer toutes les sessions associées à ce créneau
+                deleteSessionsByColumn("id_creneau", creneau.getIdCreneau());
+
+                // Supprimer le créneau lui-même
+                db.initPrepar(deleteCreneauSql);
+                db.getPstm().setInt(1, creneau.getIdCreneau());
+                result += db.executeMaj();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Creneau> getCreneauxEntreDates(LocalDateTime dateDebut, LocalDateTime dateFin) {
+        List<Creneau> creneaux = new ArrayList<>();
+        String sql = "SELECT * FROM creneau WHERE debut >= ? AND debut <= ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setObject(1, dateDebut);
+            db.getPstm().setObject(2, dateFin);
+            ResultSet rs = db.executeSelect();
+            while (rs.next()) {
+                creneaux.add(new Creneau(
+                        rs.getInt("id"),
+                        rs.getTimestamp("debut").toLocalDateTime(),
+                        rs.getTimestamp("fin").toLocalDateTime()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return creneaux;
+    }
+
+    @Override
+    public LocalDateTime getMinDebutCreneau() {
+        LocalDateTime minDebut = null;
+        String sql = "SELECT MIN(debut) AS min_debut FROM creneau";
+        db.initPrepar(sql);
+        try {
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                minDebut = rs.getTimestamp("min_debut").toLocalDateTime();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return minDebut;
+    }
 
     @Override
     public int createUE(String code, String designation) {
@@ -30,8 +116,36 @@ public class SessionImpl implements ISession {
         }
     }
 
+    public List<UniteEnseignement> getAllUEs() {
+        String sql = "SELECT id, code, designation FROM unite_enseignement ORDER BY id";
+        List<UniteEnseignement> ueList = new ArrayList<>();
+        db.initPrepar(sql);
+
+        try {
+            ResultSet rs = db.executeSelect();
+            while (rs.next()) {
+                // Crée une instance de UniteEnseignement pour chaque ligne de résultat
+                UniteEnseignement ue = new UniteEnseignement(
+                        rs.getInt("id"),
+                        rs.getString("code"),
+                        rs.getString("designation")
+                );
+                ueList.add(ue); // Ajoute l'instance à la liste
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+
+        return ueList;
+    }
+
     @Override
     public int deleteUE(int idUE) {
+        // Supprimer toutes les sessions associées à cette UE
+        deleteSessionsByColumn("id_ue", idUE);
+
         String sql = "DELETE FROM unite_enseignement WHERE id = ?";
         db.initPrepar(sql);
         try {
@@ -63,6 +177,9 @@ public class SessionImpl implements ISession {
 
     @Override
     public int deleteCreneau(int idCreneau) {
+        // Supprimer toutes les sessions associées à ce créneau
+        deleteSessionsByColumn("id_creneau", idCreneau);
+
         String sql = "DELETE FROM creneau WHERE id = ?";
         db.initPrepar(sql);
         try {
@@ -94,6 +211,9 @@ public class SessionImpl implements ISession {
 
     @Override
     public int deleteClasse(int idClasse) {
+        // Supprimer toutes les sessions associées à cette classe
+        deleteSessionsByColumn("id_classe", idClasse);
+
         String sql = "DELETE FROM classe WHERE id = ?";
         db.initPrepar(sql);
         try {
@@ -149,7 +269,6 @@ public class SessionImpl implements ISession {
         for (Session session : sessionsAcreer) {
             result += createSession(session.getIdentifiant(), session.getUe().getIdUE(), session.getClasse().getIdClasse(), session.getCreneau().getIdCreneau());
         }
-
         return result;
     }
 
@@ -249,9 +368,9 @@ public class SessionImpl implements ISession {
                         rs.getInt("id_ue"),
                         null, null,
                         rs.getInt("id_classe"),
-                        0, Classe.Specialite.MT, // Valeurs par défaut à remplacer par une requête
+                        0, Classe.Specialite.MT,
                         rs.getInt("id_creneau"),
-                        null, null // Valeurs par défaut à remplacer par une requête
+                        null, null
                 ));
             }
         } catch (Exception e) {
@@ -261,5 +380,19 @@ public class SessionImpl implements ISession {
         }
         return sessions;
     }
+
+    private void deleteSessionsByColumn(String columnName, int columnValue) {
+        String sql = "DELETE FROM session WHERE " + columnName + " = ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setInt(1, columnValue);
+            db.executeMaj();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+    }
 }
+
 

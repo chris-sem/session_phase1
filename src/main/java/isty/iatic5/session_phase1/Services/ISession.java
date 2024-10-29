@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface ISession {
     public int createUE(String code, String designation);
+    public List<UniteEnseignement> getAllUEs();
     public int deleteUE(int idUE);
     public int createCreneau(LocalDateTime debut, LocalDateTime fin);
     public int deleteCreneau(int idCreneau);
@@ -25,4 +26,9 @@ public interface ISession {
     public ObservableList<Classe> getClasse();
     public ObservableList<Creneau> getCreneau();
     public ObservableList<Session> getSession();
+
+    public LocalDateTime getMinDebutCreneau();
+    public List<Creneau> getCreneauxEntreDates(LocalDateTime dateDebut, LocalDateTime dateFin);
+    public int createMultipleCreneaux(List<Creneau> creneaux);
+    public int deleteMultipleCreneaux(List<Creneau> creneaux);
 }
