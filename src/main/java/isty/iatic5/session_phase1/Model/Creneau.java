@@ -9,11 +9,13 @@ public class Creneau {
     private LocalDateTime fin;
     private int ligne;
     private int colonne;
+    private boolean isReserved;
 
     public Creneau(int idCreneau, LocalDateTime debut, LocalDateTime fin) {
         this.idCreneau = idCreneau;
         this.debut = debut;
         this.fin = fin;
+        this.isReserved = false;
 
         // Déterminer la colonne en fonction du jour de la semaine
         DayOfWeek dayOfWeek = debut.getDayOfWeek();
@@ -70,6 +72,14 @@ public class Creneau {
 
     public void setColonne(int colonne) {
         this.colonne = colonne;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        this.isReserved = reserved;
     }
 
     @Override

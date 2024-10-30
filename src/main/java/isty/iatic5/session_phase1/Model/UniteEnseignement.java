@@ -35,6 +35,11 @@ public class UniteEnseignement {
         this.designation = designation;
     }
 
+    @Override
+    public String toString() {
+        return designation; // Return only the designation for display in ComboBox
+    }
+
     public void displayUE() {
         System.out.println("IdUE: " + idUE + "Code: " + code + "Designation: " + designation);
     }

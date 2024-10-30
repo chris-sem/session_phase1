@@ -42,4 +42,9 @@ public class Classe {
     public void displayClasse(){
         System.out.println("Classe Id: " + idClasse + " Promotion: " + promotion + " Specialite: " + specialite);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s - %s", specialite, promotion);
+    }
 }

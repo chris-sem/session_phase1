@@ -17,7 +17,7 @@
 
     <TableView fx:id="creneauxTableView" prefHeight="200" prefWidth="600">
         <columns>
-            <TableColumn fx:id="etatColumn" text="Etat" prefWidth="100" />
+            <TableColumn fx:id="statusColumn" text="Etat" prefWidth="100" />
             <TableColumn fx:id="dayColumn" text="Day" prefWidth="120" />
             <TableColumn fx:id="startTimeColumn" text="Start Time" prefWidth="100" />
             <TableColumn fx:id="endTimeColumn" text="End Time" prefWidth="100" />

@@ -1,6 +1,8 @@
 package isty.iatic5.session_phase1.Controller;
 
+import isty.iatic5.session_phase1.Model.Classe;
 import isty.iatic5.session_phase1.Model.Creneau;
+import isty.iatic5.session_phase1.Model.UniteEnseignement;
 import isty.iatic5.session_phase1.Services.DBConnexion;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -32,9 +34,9 @@ public class SessionController {
     @FXML
     private ListView<String> listView;
     @FXML
-    private ComboBox<String> ueComboBox;
+    private ComboBox<UniteEnseignement> ueComboBox;
     @FXML
-    private ComboBox<String> classComboBox;
+    private ComboBox<Classe> classComboBox;
     @FXML
     private TableView<Creneau> creneauxTableView;
     @FXML
@@ -43,6 +45,10 @@ public class SessionController {
     private TableColumn<Creneau, String> startTimeColumn;
     @FXML
     private TableColumn<Creneau, String> endTimeColumn;
+    @FXML
+    TableColumn<Creneau, String> statusColumn;
+
+
 
 
     // Variables to hold selected class and UE
@@ -74,22 +80,22 @@ public class SessionController {
             }
         });
 
-        // Set up action for UE ComboBox
         ueComboBox.setOnAction(event -> {
-            selectedUE = ueComboBox.getValue();// Store selected UE
-            if (selectedUE != null && !(selectedUE.isEmpty())) {
-                System.out.println(getUEIdByName(selectedUE));
+            UniteEnseignement selectedUE = ueComboBox.getValue(); // This will be the selected UniteEnseignement object
+            if (selectedUE != null) {
+                int idUe = selectedUE.getIdUE(); // Get the ID directly
+
             }
-            checkAndDisplayTimeSlots();          // Check if both are selected
         });
 
         // Set up action for Class ComboBox
         classComboBox.setOnAction(event -> {
-            selectedClass = classComboBox.getValue();
-            if (selectedClass != null && !(selectedClass.isEmpty())) {
-                System.out.println(getClassIdByName(selectedClass));
+            Classe selectedClass = classComboBox.getValue(); // This will be the selected Classe object
+            if (selectedClass != null) {
+                int idClasse = selectedClass.getIdClasse(); // Get the ID directly
+                System.out.println("id classe : "+ idClasse);
             }
-            checkAndDisplayTimeSlots();               // Check if both are selected
+
         });
 
         // Define a formatter for date and time
@@ -113,22 +119,19 @@ public class SessionController {
             return new SimpleStringProperty(fin.format(timeFormatter));
         });
 
+        statusColumn.setCellValueFactory(cellData -> {
+            return new SimpleStringProperty(cellData.getValue().isReserved() ? "Réservé" : "Disponible");
+        });
 
     }
 
-    // Method to check selections and display time slots
-    private void checkAndDisplayTimeSlots() {
-        // Check if both selectedClass and selectedUE are not null
-        if (selectedClass != null && selectedUE != null) {
-            displayAvailableCreneaux(); // Call to display time slots
-        }
-    }
+
 
     @FXML
     private void afficherUE() {
         DBConnexion dbConnexion = new DBConnexion();
-        // Update SQL query to select UE data (replace 'ue_name' and 'ue_code' with actual column names)
-        String sql = "SELECT designation FROM unite_enseignement"; // Update table and column names as needed
+        // Update SQL query to select UE data (include idUE, code, and designation)
+        String sql = "SELECT id, code, designation FROM unite_enseignement"; // Update table and column names as needed
 
         try {
             dbConnexion.initPrepar(sql); // Initialize the PreparedStatement with the SQL query
@@ -138,10 +141,13 @@ public class SessionController {
             ueComboBox.getItems().clear();
 
             while (rs.next()) {
-                String ueName = rs.getString("designation"); // Get UE name
+                int idUE = rs.getInt("id"); // Get UE ID
+                String code = rs.getString("code"); // Get UE code (if needed)
+                String designation = rs.getString("designation"); // Get UE designation
 
-                // Add the combined string to the ComboBox
-                ueComboBox.getItems().add(ueName);
+                // Create a new UniteEnseignement object and add it to the ComboBox
+                UniteEnseignement ue = new UniteEnseignement(idUE, code, designation);
+                ueComboBox.getItems().add(ue);
             }
 
             rs.close(); // Close the ResultSet
@@ -155,44 +161,39 @@ public class SessionController {
         }
     }
 
-    @FXML
     private void afficherClasses() {
         DBConnexion dbConnexion = new DBConnexion();
-        // Update SQL query to select both 'spécialité' and 'promotion'
-        String sql = "SELECT specialite, promotion FROM classe"; // Replace with your actual column names and table name
+        String sql = "SELECT id, specialite, promotion FROM classe";
 
         try {
-            dbConnexion.initPrepar(sql); // Initialize the PreparedStatement with the SQL query
+            dbConnexion.initPrepar(sql);
+            ResultSet rs = dbConnexion.executeSelect();
 
-            ResultSet rs = dbConnexion.executeSelect(); // Execute the select query
-
-            // Clear the ComboBox before adding new items
-            classComboBox.getItems().clear();
+            classComboBox.getItems().clear(); // Clear previous items
 
             while (rs.next()) {
+                int id = rs.getInt("id"); // Get the ID
+                String specialiteString = rs.getString("specialite"); // Get specialité
+                int promotion = rs.getInt("promotion"); // Get promotion
 
-                String specialite = rs.getString("specialite"); // Get specialité
-                String promotion = rs.getString("promotion"); // Get promotion
+                Classe.Specialite specialite = Classe.Specialite.valueOf(specialiteString.toUpperCase());
 
-                // Combine spécialité and promotion into a single string for display
-                String displayText = String.format("%s - %s", specialite, promotion); // Example format: "Speciality - Promotion"
-
-                // Add the combined string to the ComboBox
-                classComboBox.getItems().add(displayText);
+                // Create a new Classe object and add it to the ComboBox
+                Classe classe = new Classe(id, promotion, specialite);
+                classComboBox.getItems().add(classe);
             }
 
-            rs.close(); // Close the ResultSet
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle the exception, maybe show an alert to the user
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load UE data.");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load class data.");
             alert.showAndWait();
         } finally {
-            dbConnexion.closeConnection(); // Close the database connection
+            dbConnexion.closeConnection();
         }
     }
 
-    private void displayAvailableCreneaux() {
+    private void displayAvailableCreneaux(int idClasse, int idUe) {
         DBConnexion dbConnexion = new DBConnexion();
         String sql = "SELECT id, debut, fin FROM creneau";  // Adjust table and column names as needed
 
@@ -206,7 +207,9 @@ public class SessionController {
                 LocalDateTime debut = rs.getTimestamp("debut").toLocalDateTime();
                 LocalDateTime fin = rs.getTimestamp("fin").toLocalDateTime();
 
-                creneauxList.add(new Creneau(idCreneau, debut, fin));
+                Creneau creneau = new Creneau(idCreneau, debut, fin);
+                creneau.setReserved(isCreneauReserved(idCreneau, idClasse, idUe));
+                creneauxList.add(creneau);
             }
 
             creneauxTableView.setItems(creneauxList); // Display in TableView
@@ -245,36 +248,9 @@ public class SessionController {
         return false; // Le créneau est disponible
     }
 
-    //works
-    // Method to get the ID of a UE based on its name
-    public int getUEIdByName(String ueName) {
-        int ueId = -1; // Default value if not found
-        DBConnexion dbConnexion = new DBConnexion(); // Assuming DBConnexion is your database connection class
-
-        String sql = "SELECT id FROM unite_enseignement WHERE designation = ?"; // Replace 'name' with the actual column name in your ue table
-
-        try (Connection connection = dbConnexion.getConnection(); // Get connection from your DBConnexion class
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            // Set the parameter for the prepared statement
-            preparedStatement.setString(1, ueName);
-
-            // Execute the query
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            // Check if a result was returned
-            if (resultSet.next()) {
-                ueId = resultSet.getInt("id"); // Get the id from the result set
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle exceptions properly in a real application
-        }
-
-        return ueId; // Return the found ID, or -1 if not found
-    }
 
 
-
+    /*
     //works
     public int getClassIdByName(String Spec_Prom) {
         int classId = -1; // Default value if not found
@@ -317,6 +293,8 @@ public class SessionController {
 
         return classId; // Return the found ID, or -1 if not found
     }
+    */
+
 
 
 
