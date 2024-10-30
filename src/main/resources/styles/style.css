@@ -1,0 +1,10 @@
+/* style.css */
+.disponible {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+}
+
+.reserve {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+}
