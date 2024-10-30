@@ -146,7 +146,17 @@ public class SessionController {
                 if (creneau.getStatut().equals("Réservé")) {
                     actionLabel.setText("Supprimer Session");
                     actionLabel.setStyle("-fx-text-fill: orange; -fx-underline: true;");
-                    actionLabel.setOnMouseClicked(event -> supprimerSession(creneau));
+                    actionLabel.setOnMouseClicked(event -> {
+                        // Exemple d'identifiant de session, idUE, idClasse et idCreneau
+                        String identifiant = "session123"; // Remplacez par un identifiant unique
+                        int idUE = ueComboBox.getValue().getIdUE();
+                        int idClasse = classComboBox.getValue().getIdClasse();
+                        int idCreneau = creneau.getIdCreneau();
+
+
+                        sessionService.deleteSession(sessionService.GetIdSession(idUE, idClasse, idCreneau));
+                        updateCreneaux();
+                    });
                 } else if (creneau.getStatut().equals("Disponible")) {
                     actionLabel.setText("Créer Session");
                     actionLabel.setStyle("-fx-text-fill: green; -fx-underline: true;");

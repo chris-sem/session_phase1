@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="l'affichage du résultat Action">
+    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="Create Session">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +129,7 @@
       <workItem from="1730228594757" duration="575000" />
       <workItem from="1730229207704" duration="209000" />
       <workItem from="1730229453445" duration="2055000" />
-      <workItem from="1730279086239" duration="20735000" />
+      <workItem from="1730279086239" duration="21397000" />
     </task>
     <task id="LOCAL-00001" summary="UE and classe buttons">
       <option name="closed" value="true" />
@@ -210,7 +211,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730298179944</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Create Session">
+      <option name="closed" value="true" />
+      <created>1730301585638</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1730301585638</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,7 +247,8 @@
     <MESSAGE value="Style Etat" />
     <MESSAGE value="Style Etat 1" />
     <MESSAGE value="l'affichage du résultat Action" />
-    <option name="LAST_COMMIT_MESSAGE" value="l'affichage du résultat Action" />
+    <MESSAGE value="Create Session" />
+    <option name="LAST_COMMIT_MESSAGE" value="Create Session" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -368,6 +368,26 @@ public class SessionImpl implements ISession {
             db.closeConnection();
         }
     }
+
+    public int GetIdSession(int idUE, int idClasse, int idCreneau){
+        String sql = "SELECT id FROM session WHERE id_ue = ? AND id_classe = ? AND id_creneau = ?";
+        db.initPrepar(sql);
+        try {
+
+            db.getPstm().setInt(1, idUE);
+            db.getPstm().setInt(2, idClasse);
+            db.getPstm().setInt(3, idCreneau);
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return 0;
+    }
 }
 
 
