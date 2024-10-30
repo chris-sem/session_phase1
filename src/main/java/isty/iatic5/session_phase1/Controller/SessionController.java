@@ -47,6 +47,9 @@ public class SessionController {
     private TableColumn<Creneau, String> endTimeColumn;
     @FXML
     TableColumn<Creneau, String> statusColumn;
+    @FXML
+    private TableColumn<Creneau, Void> actionColumn;
+
 
 
 
@@ -122,6 +125,52 @@ public class SessionController {
                 }
             }
         });
+
+        actionColumn.setCellFactory(column -> new TableCell<Creneau, Void>() {
+            private final Label actionLabel = new Label();
+
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                    return;
+                }
+
+                Creneau creneau = getTableView().getItems().get(getIndex());
+                if (creneau.getStatut().equals("Réservé")) {
+                    actionLabel.setText("Supprimer Session");
+                    actionLabel.setStyle("-fx-text-fill: blue; -fx-underline: true;");
+                    actionLabel.setOnMouseClicked(event -> supprimerSession(creneau));
+                } else if (creneau.getStatut().equals("Disponible")) {
+                    actionLabel.setText("Créer Session");
+                    actionLabel.setStyle("-fx-text-fill: blue; -fx-underline: true;");
+                    actionLabel.setOnMouseClicked(event -> creerSession(creneau));
+                }else {
+                    // Afficher un message pour les créneaux déjà utilisés
+                    actionLabel.setText("Ce créneau est déjà utilisé par une autre session");
+                    actionLabel.setStyle("-fx-text-fill: red;");
+                    actionLabel.setOnMouseClicked(null); // Désactiver le clic sur ce texte
+                }
+
+                setGraphic(actionLabel);
+            }
+        });
+
+
+
+    }
+
+    private void supprimerSession(Creneau creneau) {
+        // Code to delete the session for the given creneau
+        System.out.println("Session supprimée pour le créneau: " + creneau);
+    }
+
+    private void creerSession(Creneau creneau) {
+        // Code to create a session for the given creneau
+        System.out.println("Session créée pour le créneau: " + creneau);
     }
 
 

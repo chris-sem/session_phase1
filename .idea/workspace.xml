@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="Etat : disponible, indisponible et réservé">
+    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="Style Etat 1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/View/session-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/session-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,26 +55,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;SUS__A&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/semje/IdeaProjects/session_phase1&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.externalResources&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "SUS__A",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/semje/IdeaProjects/session_phase1",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.externalResources",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="isty.iatic5.session_phase1.Services" />
@@ -129,7 +128,7 @@
       <workItem from="1730228594757" duration="575000" />
       <workItem from="1730229207704" duration="209000" />
       <workItem from="1730229453445" duration="2055000" />
-      <workItem from="1730279086239" duration="14458000" />
+      <workItem from="1730279086239" duration="17436000" />
     </task>
     <task id="LOCAL-00001" summary="UE and classe buttons">
       <option name="closed" value="true" />
@@ -187,7 +186,23 @@
       <option name="project" value="LOCAL" />
       <updated>1730294287737</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Style Etat">
+      <option name="closed" value="true" />
+      <created>1730295298587</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1730295298587</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Style Etat 1">
+      <option name="closed" value="true" />
+      <created>1730295310273</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1730295310273</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,7 +227,9 @@
     <MESSAGE value="retrieve id from classe and UE" />
     <MESSAGE value="Retrieve availabe time slots for Ue and Classe" />
     <MESSAGE value="Etat : disponible, indisponible et réservé" />
-    <option name="LAST_COMMIT_MESSAGE" value="Etat : disponible, indisponible et réservé" />
+    <MESSAGE value="Style Etat" />
+    <MESSAGE value="Style Etat 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Style Etat 1" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
