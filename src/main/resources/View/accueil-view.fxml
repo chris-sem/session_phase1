@@ -8,10 +8,36 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<VBox  xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.AccueilController" alignment="CENTER" spacing="10" >
-    <Button text="Gestion des Creneaux" onAction="#goToCreneau"/>
-    <Button text="Gestion des classes" onAction="#goToClasse"/>
-    <Button text="Gestion des unités d'enseignement" onAction="#goToUe"/>
-    <Button text="Gestion des sessions" onAction="#goToSession"/>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.AccueilController"
+      alignment="CENTER" spacing="20" style="-fx-background-color: #f0f4f8; -fx-padding: 30;">
+
+    <!-- Titre de la page d'accueil -->
+    <Label text="Bienvenue sur la page d'accueil" textFill="#2c3e50">
+        <font>
+            <Font name="Arial" size="24" />
+        </font>
+    </Label>
+
+    <!-- Sous-titre pour les instructions -->
+    <Label text="Sélectionnez une gestion à administrer" textFill="#34495e">
+        <font>
+            <Font name="Arial" size="16" />
+        </font>
+    </Label>
+
+    <!-- Séparation visuelle -->
+    <HBox alignment="CENTER" style="-fx-background-color: #bdc3c7; -fx-min-height: 2; -fx-max-width: 300;" />
+
+    <!-- Boutons de gestion avec des styles améliorés -->
+    <Button text="Gestion des Creneaux" onAction="#goToCreneau" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-pref-width: 250;" />
+
+    <Button text="Gestion des Classes" onAction="#goToClasse" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-pref-width: 250;" />
+
+    <Button text="Gestion des Unités d'Enseignement" onAction="#goToUe" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-pref-width: 250;" />
+
+    <Button text="Gestion des Sessions" onAction="#goToSession" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-pref-width: 250;" />
+
 </VBox>

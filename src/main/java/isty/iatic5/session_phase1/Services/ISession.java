@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ISession {
+    public List<UniteEnseignement> getAllUEs();
     public int createUE(String code, String designation);
     public int deleteUE(int idUE);
     public int createCreneau(LocalDateTime debut, LocalDateTime fin);
