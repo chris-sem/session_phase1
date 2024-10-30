@@ -14,8 +14,7 @@
         <ComboBox fx:id="ueComboBox" promptText="UE"/>
         <ComboBox fx:id="classComboBox" promptText="Class"/>
     </HBox>
-
-    <TableView fx:id="creneauxTableView" prefHeight="200" prefWidth="600">
+    <TableView fx:id="creneauxTableView" prefHeight="600" prefWidth="600">
         <columns>
             <TableColumn fx:id="statusColumn" text="Etat" prefWidth="140" />
             <TableColumn fx:id="dayColumn" text="Day" prefWidth="100" />
