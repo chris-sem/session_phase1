@@ -19,8 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class SessionController {
-    private boolean isUEVisible = false;
-    private boolean isClasseVisible = false;
+
 
 
 
@@ -144,7 +143,8 @@ public class SessionController {
 
 
                         sessionService.deleteSession(sessionService.GetIdSession(idUE, idClasse, idCreneau));
-                        updateCreneaux();
+                        creneau.setStatut("Disponible");
+                        getTableView().refresh();
                     });
                 } else if (creneau.getStatut().equals("Disponible")) {
                     actionLabel.setText("Créer Session");
@@ -158,7 +158,8 @@ public class SessionController {
 
 
                         sessionService.createSession(identifiant, idUE, idClasse, idCreneau);
-                        updateCreneaux();
+                        creneau.setStatut("Réservé");
+                        getTableView().refresh();
                     });
                 }else {
                     // Afficher un message pour les créneaux déjà utilisés
@@ -166,7 +167,6 @@ public class SessionController {
                     actionLabel.setStyle("-fx-text-fill: red;");
                     actionLabel.setOnMouseClicked(null); // Désactiver le clic sur ce texte
                 }
-
                 setGraphic(actionLabel);
             }
         });
