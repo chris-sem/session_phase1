@@ -4,6 +4,7 @@ import isty.iatic5.session_phase1.Model.Classe;
 import isty.iatic5.session_phase1.Model.Creneau;
 import isty.iatic5.session_phase1.Model.UniteEnseignement;
 import isty.iatic5.session_phase1.Services.DBConnexion;
+import isty.iatic5.session_phase1.Services.SessionImpl;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -54,16 +55,18 @@ public class SessionController {
 
 
 
-    // Variables to hold selected class and UE
-    private String selectedClass = null;
-    private String selectedUE = null;
+
 
 
     @FXML
     private void initialize() {
+
+        SessionImpl sessionService = new SessionImpl();
+
         // Ajouter un écouteur d'action pour les ComboBox
         ueComboBox.setOnAction(event -> updateCreneaux());
         classComboBox.setOnAction(event -> updateCreneaux());
+
 
         // Set up the Class ComboBox to show available classes on click
         classComboBox.setOnMouseClicked(event -> {
@@ -142,12 +145,22 @@ public class SessionController {
                 Creneau creneau = getTableView().getItems().get(getIndex());
                 if (creneau.getStatut().equals("Réservé")) {
                     actionLabel.setText("Supprimer Session");
-                    actionLabel.setStyle("-fx-text-fill: blue; -fx-underline: true;");
+                    actionLabel.setStyle("-fx-text-fill: orange; -fx-underline: true;");
                     actionLabel.setOnMouseClicked(event -> supprimerSession(creneau));
                 } else if (creneau.getStatut().equals("Disponible")) {
                     actionLabel.setText("Créer Session");
-                    actionLabel.setStyle("-fx-text-fill: blue; -fx-underline: true;");
-                    actionLabel.setOnMouseClicked(event -> creerSession(creneau));
+                    actionLabel.setStyle("-fx-text-fill: green; -fx-underline: true;");
+                    actionLabel.setOnMouseClicked(event -> {
+                        // Exemple d'identifiant de session, idUE, idClasse et idCreneau
+                        String identifiant = "session123"; // Remplacez par un identifiant unique
+                        int idUE = ueComboBox.getValue().getIdUE();
+                        int idClasse = classComboBox.getValue().getIdClasse();
+                        int idCreneau = creneau.getIdCreneau();
+
+
+                        sessionService.createSession(identifiant, idUE, idClasse, idCreneau);
+                        updateCreneaux();
+                    });
                 }else {
                     // Afficher un message pour les créneaux déjà utilisés
                     actionLabel.setText("Ce créneau est déjà utilisé par une autre session");
@@ -163,15 +176,12 @@ public class SessionController {
 
     }
 
+
     private void supprimerSession(Creneau creneau) {
         // Code to delete the session for the given creneau
         System.out.println("Session supprimée pour le créneau: " + creneau);
     }
 
-    private void creerSession(Creneau creneau) {
-        // Code to create a session for the given creneau
-        System.out.println("Session créée pour le créneau: " + creneau);
-    }
 
 
     private void updateCreneaux() {
