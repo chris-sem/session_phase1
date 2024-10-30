@@ -1,16 +1,20 @@
 package isty.iatic5.session_phase1.Controller;
 
+import isty.iatic5.session_phase1.Model.Creneau;
 import isty.iatic5.session_phase1.Services.DBConnexion;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SessionController {
     private boolean isUEVisible = false;
@@ -29,6 +33,15 @@ public class SessionController {
     private ComboBox<String> ueComboBox;
     @FXML
     private ComboBox<String> classComboBox;
+    @FXML
+    private TableView<Creneau> creneauxTableView;
+    @FXML
+    private TableColumn<Creneau, String> dayColumn;
+    @FXML
+    private TableColumn<Creneau, String> startTimeColumn;
+    @FXML
+    private TableColumn<Creneau, String> endTimeColumn;
+
 
     // Variables to hold selected class and UE
     private String selectedClass = null;
@@ -71,9 +84,27 @@ public class SessionController {
             checkAndDisplayTimeSlots();               // Check if both are selected
         });
 
+        // Define a formatter for date and time
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        // Set up the Day column to show only the date part of 'debut'
+        dayColumn.setCellValueFactory(cellData -> {
+            LocalDateTime debut = cellData.getValue().getDebut();
+            return new SimpleStringProperty(debut.format(dateFormatter));
+        });
 
+        // Set up the Debut column to show only the time part of 'debut'
+        startTimeColumn.setCellValueFactory(cellData -> {
+            LocalDateTime debut = cellData.getValue().getDebut();
+            return new SimpleStringProperty(debut.format(timeFormatter));
+        });
 
-        // Set up action for time slot ListView
+        // Set up the Fin column to show only the time part of 'fin'
+        endTimeColumn.setCellValueFactory(cellData -> {
+            LocalDateTime fin = cellData.getValue().getFin();
+            return new SimpleStringProperty(fin.format(timeFormatter));
+        });
+
 
     }
 
@@ -81,7 +112,7 @@ public class SessionController {
     private void checkAndDisplayTimeSlots() {
         // Check if both selectedClass and selectedUE are not null
         if (selectedClass != null && selectedUE != null) {
-            afficherCreneaux(); // Call to display time slots
+            displayAvailableCreneaux(); // Call to display time slots
         }
     }
 
@@ -153,31 +184,30 @@ public class SessionController {
         }
     }
 
-    @FXML
-    private void afficherCreneaux() {
+    private void displayAvailableCreneaux() {
         DBConnexion dbConnexion = new DBConnexion();
-        // SQL query to fetch all available time slots
-        String sql = "SELECT debut, fin FROM creneau"; // Adjust the column names as necessary
+        String sql = "SELECT id, debut, fin FROM creneau";  // Adjust table and column names as needed
 
         try {
-            timeSlotListView.getItems().clear(); // Clear existing items in the ListView
             dbConnexion.initPrepar(sql);
-
             ResultSet rs = dbConnexion.executeSelect();
+            ObservableList<Creneau> creneauxList = FXCollections.observableArrayList();
 
             while (rs.next()) {
-                // Assuming you want to display both start and end dates as time slots
-                String creneau = "Start: " + rs.getString("date_debut") + " - End: " + rs.getString("date_fin");
-                timeSlotListView.getItems().add(creneau); // Add creneau to ListView
+                int idCreneau = rs.getInt("id");
+                LocalDateTime debut = rs.getTimestamp("debut").toLocalDateTime();
+                LocalDateTime fin = rs.getTimestamp("fin").toLocalDateTime();
+
+                creneauxList.add(new Creneau(idCreneau, debut, fin));
             }
 
-            rs.close(); // Close ResultSet
+            creneauxTableView.setItems(creneauxList); // Display in TableView
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load available time slots.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to load available time slots.").showAndWait();
         } finally {
-            dbConnexion.closeConnection(); // Close DB connection
+            dbConnexion.closeConnection();
         }
     }
 

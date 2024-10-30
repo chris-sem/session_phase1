@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="UE and classe buttons">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="Amelioration : UE and classe buttons">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/View/session-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/session-view.fxml" afterDir="false" />
@@ -130,7 +129,7 @@
       <workItem from="1730228594757" duration="575000" />
       <workItem from="1730229207704" duration="209000" />
       <workItem from="1730229453445" duration="2055000" />
-      <workItem from="1730279086239" duration="300000" />
+      <workItem from="1730279086239" duration="3149000" />
     </task>
     <task id="LOCAL-00001" summary="UE and classe buttons">
       <option name="closed" value="true" />
@@ -140,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730225651144</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Amelioration : UE and classe buttons">
+      <option name="closed" value="true" />
+      <created>1730279458162</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730279458162</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -159,7 +166,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="UE and classe buttons" />
-    <option name="LAST_COMMIT_MESSAGE" value="UE and classe buttons" />
+    <MESSAGE value="Amelioration : UE and classe buttons" />
+    <option name="LAST_COMMIT_MESSAGE" value="Amelioration : UE and classe buttons" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
