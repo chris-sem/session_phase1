@@ -55,52 +55,31 @@ public class SessionController {
     private String selectedClass = null;
     private String selectedUE = null;
 
-    @FXML
-    private void handleListClick() {
-        String selectedUE = listView.getSelectionModel().getSelectedItem();
-        if (selectedUE != null) {
-            listView.getItems().clear(); // Clear the list view after selection
-            // Optionally, show a message or perform another action
-
-        }
-    }
 
     @FXML
     private void initialize() {
-        // Set up action for Class ComboBox
+        // Ajouter un écouteur d'action pour les ComboBox
+        ueComboBox.setOnAction(event -> updateCreneaux());
+        classComboBox.setOnAction(event -> updateCreneaux());
+
+        // Set up the Class ComboBox to show available classes on click
         classComboBox.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) { // Single click to show available classes
-                afficherClasses(); // Populate the ComboBox and ListView
+                afficherClasses(); // Populate the ComboBox with classes
             }
         });
 
+        // Set up the UE ComboBox to show available UE on click
         ueComboBox.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 1) { // Single click to show available ue
-                afficherUE(); // Populate the ComboBox and ListView
+            if (event.getClickCount() == 1) { // Single click to show available UE
+                afficherUE(); // Populate the ComboBox with UE
             }
-        });
-
-        ueComboBox.setOnAction(event -> {
-            UniteEnseignement selectedUE = ueComboBox.getValue(); // This will be the selected UniteEnseignement object
-            if (selectedUE != null) {
-                int idUe = selectedUE.getIdUE(); // Get the ID directly
-
-            }
-        });
-
-        // Set up action for Class ComboBox
-        classComboBox.setOnAction(event -> {
-            Classe selectedClass = classComboBox.getValue(); // This will be the selected Classe object
-            if (selectedClass != null) {
-                int idClasse = selectedClass.getIdClasse(); // Get the ID directly
-                System.out.println("id classe : "+ idClasse);
-            }
-
         });
 
         // Define a formatter for date and time
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
         // Set up the Day column to show only the date part of 'debut'
         dayColumn.setCellValueFactory(cellData -> {
             LocalDateTime debut = cellData.getValue().getDebut();
@@ -122,9 +101,18 @@ public class SessionController {
         statusColumn.setCellValueFactory(cellData -> {
             return new SimpleStringProperty(cellData.getValue().isReserved() ? "Réservé" : "Disponible");
         });
-
     }
 
+
+    private void updateCreneaux() {
+        UniteEnseignement selectedUE = ueComboBox.getValue();
+        Classe selectedClass = classComboBox.getValue();
+
+        if (selectedUE != null && selectedClass != null) {
+            displayAvailableCreneaux(selectedClass.getIdClasse(), selectedUE.getIdUE());
+            creneauxTableView.refresh();
+        }
+    }
 
 
     @FXML
@@ -247,55 +235,6 @@ public class SessionController {
         }
         return false; // Le créneau est disponible
     }
-
-
-
-    /*
-    //works
-    public int getClassIdByName(String Spec_Prom) {
-        int classId = -1; // Default value if not found
-        DBConnexion dbConnexion = new DBConnexion(); // Assuming DBConnexion is your database connection class
-
-        // Split the display text into specialization and promotion
-        String[] parts = Spec_Prom.split(" - ");
-        if (parts.length != 2) {
-            return classId; // Invalid format, return default
-        }
-
-        String specialite = parts[0].trim(); // Get specialization
-        int promotion;
-        try {
-            promotion = Integer.parseInt(parts[1].trim()); // Parse promotion
-        } catch (NumberFormatException e) {
-            e.printStackTrace(); // Handle exception if parsing fails
-            return classId; // Return default if parsing fails
-        }
-
-        String sql = "SELECT id FROM classe WHERE specialite = ? AND promotion = ?"; // SQL query to find class by specialite and promotion
-
-        try (Connection connection = dbConnexion.getConnection(); // Get connection from your DBConnexion class
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            // Set parameters for the prepared statement
-            preparedStatement.setString(1, specialite); // Set the specialization
-            preparedStatement.setInt(2, promotion); // Set the promotion
-
-            // Execute the query
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            // Check if a result was returned
-            if (resultSet.next()) {
-                classId = resultSet.getInt("id"); // Get the id from the result set
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle exceptions properly in a real application
-        }
-
-        return classId; // Return the found ID, or -1 if not found
-    }
-    */
-
-
 
 
     public void setStage(Stage stage) {
