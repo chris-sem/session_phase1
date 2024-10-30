@@ -9,11 +9,19 @@
 <VBox alignment="TOP_CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.SessionController" stylesheets="@../styles/style.css">
     <VBox minHeight="1" maxHeight="1"/>
 
+
+
     <HBox alignment="CENTER" spacing="10">
         <!-- ComboBoxes for selecting UE and Class -->
         <ComboBox fx:id="ueComboBox" promptText="UE"/>
         <ComboBox fx:id="classComboBox" promptText="Class"/>
     </HBox>
+
+    <VBox spacing="10" alignment="CENTER">
+        <DatePicker fx:id="datePicker"/>
+        <Button fx:id="searchButton" text="Search" onAction="#handleSearch"/>
+    </VBox>
+
     <TableView fx:id="creneauxTableView" prefHeight="600" prefWidth="600">
         <columns>
             <TableColumn fx:id="statusColumn" text="Etat" prefWidth="140" />

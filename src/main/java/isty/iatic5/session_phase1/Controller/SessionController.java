@@ -10,11 +10,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -40,6 +42,14 @@ public class SessionController {
     @FXML
     private TableColumn<Creneau, Void> actionColumn;
 
+    @FXML
+    DatePicker datePicker = new DatePicker();
+    @FXML
+    Button searchButton = new Button("Search");
+
+    // Add the DatePicker and Button to your layout (e.g., a VBox or HBox)
+    VBox layout = new VBox(datePicker, searchButton);
+
 
     @FXML
     private void initialize() {
@@ -49,6 +59,7 @@ public class SessionController {
         // Ajouter un écouteur d'action pour les ComboBox
         ueComboBox.setOnAction(event -> updateCreneaux());
         classComboBox.setOnAction(event -> updateCreneaux());
+        searchButton.setOnAction(event -> handleSearch());
 
 
         // Set up the Class ComboBox to show available classes on click
@@ -72,8 +83,8 @@ public class SessionController {
         });
 
         // Define a formatter for date and time
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
         // Set up the Day column to show only the date part of 'debut'
         dayColumn.setCellValueFactory(cellData -> {
@@ -107,9 +118,7 @@ public class SessionController {
                     setStyle("");
                 } else {
                     setText(status);
-                    if (status.equals("Indisponible")) {
-                        setStyle("-fx-background-color: red; -fx-text-fill: white;"); // Style pour "Réservé"
-                    } else if (status.equals("Réservé")){
+                    if (status.equals("Réservé")){
                         setStyle("-fx-background-color: orange; -fx-text-fill: white;"); // Style pour "Réservé"
                     }else {
                         setStyle("-fx-background-color: green; -fx-text-fill: white;"); // Style pour "Disponible"
@@ -161,11 +170,6 @@ public class SessionController {
                         creneau.setStatut("Réservé");
                         getTableView().refresh();
                     });
-                }else {
-                    // Afficher un message pour les créneaux déjà utilisés
-                    actionLabel.setText("Ce créneau est déjà utilisé par une autre session");
-                    actionLabel.setStyle("-fx-text-fill: red;");
-                    actionLabel.setOnMouseClicked(null); // Désactiver le clic sur ce texte
                 }
                 setGraphic(actionLabel);
             }
@@ -175,6 +179,22 @@ public class SessionController {
 
     }
 
+
+    @FXML
+    private void handleSearch() {
+        LocalDate selectedDate = datePicker.getValue();
+        UniteEnseignement selectedUE = ueComboBox.getValue();
+        Classe selectedClass = classComboBox.getValue();
+
+        // Check if both UE and Class are selected
+        if (selectedUE != null && selectedClass != null && selectedDate != null) {
+            // Display available creneaux filtered by selected date
+            displayAvailableCreneaux(selectedClass.getIdClasse(), selectedUE.getIdUE(), selectedDate);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a Unit of Education, Class, and Date.");
+            alert.showAndWait();
+        }
+    }
 
     private void updateCreneaux() {
         UniteEnseignement selectedUE = ueComboBox.getValue();
@@ -255,11 +275,30 @@ public class SessionController {
     }
 
     private void displayAvailableCreneaux(int idClasse, int idUe) {
+        // Call the existing method but with a null date
+        displayAvailableCreneaux(idClasse, idUe, null);
+    }
+
+    private void displayAvailableCreneaux(int idClasse, int idUe, LocalDate selectedDate) {
         DBConnexion dbConnexion = new DBConnexion();
-        String sql = "SELECT id, debut, fin FROM creneau";  // Adjust table and column names as needed
+        String sql;
+
+        if (selectedDate != null) {
+            // Adjust the SQL query to filter by date
+            sql = "SELECT id, debut, fin FROM creneau WHERE DATE(debut) = ?";
+        } else {
+            // Fetch all creneaux if no date is selected
+            sql = "SELECT id, debut, fin FROM creneau";
+        }
 
         try {
             dbConnexion.initPrepar(sql);
+
+            // If a date is selected, set it in the prepared statement
+            if (selectedDate != null) {
+                dbConnexion.getPstm().setDate(1, java.sql.Date.valueOf(selectedDate));
+            }
+
             ResultSet rs = dbConnexion.executeSelect();
             ObservableList<Creneau> creneauxList = FXCollections.observableArrayList();
 
@@ -269,11 +308,16 @@ public class SessionController {
                 LocalDateTime fin = rs.getTimestamp("fin").toLocalDateTime();
 
                 Creneau creneau = new Creneau(idCreneau, debut, fin);
-                creneau.setStatut(isCreneauReserved(idCreneau, idClasse, idUe));
-                creneauxList.add(creneau);
+                String statut = isCreneauReserved(idCreneau, idClasse, idUe);
+
+                // Add to list only if the status is not "Indisponible"
+                if (!statut.equals("Indisponible")) {
+                    creneau.setStatut(statut);
+                    creneauxList.add(creneau);
+                }
             }
 
-            creneauxTableView.setItems(creneauxList); // Display in TableView
+            creneauxTableView.setItems(creneauxList); // Display in TableView only available slots
             rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
