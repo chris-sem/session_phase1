@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" prefHeight="498.0" prefWidth="820.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.CreneauController">
-    <Button fx:id="homeButton" text="Accueil" onAction="#goToHome" />
     <!-- Ligne de la semaine et de l'année avec bouton Accéder -->
     <HBox alignment="CENTER" prefHeight="65.0" prefWidth="633.0" spacing="10.0">
         <Label text="Semaine numéro :" />
@@ -67,4 +66,5 @@
             <Insets bottom="10.0" />
         </padding>
     </HBox>
+    <Button text="Accueil" onAction="#goToHome" />
 </VBox>

@@ -31,4 +31,9 @@ public interface ISession {
     public List<Creneau> getCreneauxEntreDates(LocalDateTime dateDebut, LocalDateTime dateFin);
     public int createMultipleCreneaux(List<Creneau> creneaux);
     public int deleteMultipleCreneaux(List<Creneau> creneaux);
+    public void deleteSessionsByColumn(String columnName, int columnValue);
+    public int GetIdSession(int idUE, int idClasse, int idCreneau);
+    public int getLastSessionId();
+
+
 }

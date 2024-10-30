@@ -9,11 +9,14 @@ public class Creneau {
     private LocalDateTime fin;
     private int ligne;
     private int colonne;
+    private String Statut;
+
 
     public Creneau(int idCreneau, LocalDateTime debut, LocalDateTime fin) {
         this.idCreneau = idCreneau;
         this.debut = debut;
         this.fin = fin;
+        this.Statut = "Disponible";
 
         // Déterminer la colonne en fonction du jour de la semaine
         DayOfWeek dayOfWeek = debut.getDayOfWeek();
@@ -75,6 +78,13 @@ public class Creneau {
     @Override
     public String toString() {
         return ("Creneau id: " + idCreneau + " debut: " + debut + " fin: " + fin + " ligne: " + ligne + " colonne: " + colonne);
+    }
+    public String getStatut() {
+        return Statut;
+    }
+
+    public void setStatut(String statut) {
+        this.Statut = statut;
     }
 
     // Pour comparer deux objets RepresentationTableau

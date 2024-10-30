@@ -6,6 +6,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox  xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.SessionController" alignment="CENTER" spacing="10" >
+<VBox alignment="TOP_CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.SessionController" stylesheets="@../Styles/style.css">
+    <VBox minHeight="1" maxHeight="1"/>
+
+    <HBox alignment="CENTER" spacing="10">
+        <!-- ComboBoxes for selecting UE and Class -->
+        <ComboBox fx:id="ueComboBox" promptText="UE"/>
+        <ComboBox fx:id="classComboBox" promptText="Class"/>
+    </HBox>
+
+    <TableView fx:id="creneauxTableView" prefHeight="200" prefWidth="600">
+        <columns>
+            <TableColumn fx:id="statusColumn" text="Etat" prefWidth="140" />
+            <TableColumn fx:id="dayColumn" text="Day" prefWidth="100" />
+            <TableColumn fx:id="startTimeColumn" text="Start Time" prefWidth="100" />
+            <TableColumn fx:id="endTimeColumn" text="End Time" prefWidth="100" />
+            <TableColumn fx:id="actionColumn" text="Action" prefWidth="160" />
+        </columns>
+    </TableView>
+
+    <!-- Bouton "Home" pour revenir à la page d'accueil -->
+    <Button text="Accueil" onAction="#goToHome" />
 
 </VBox>

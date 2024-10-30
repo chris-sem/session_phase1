@@ -381,8 +381,8 @@ public class SessionImpl implements ISession {
         }
         return sessions;
     }
-
-    private void deleteSessionsByColumn(String columnName, int columnValue) {
+    @Override
+    public void deleteSessionsByColumn(String columnName, int columnValue) {
         String sql = "DELETE FROM session WHERE " + columnName + " = ?";
         db.initPrepar(sql);
         try {
@@ -393,6 +393,42 @@ public class SessionImpl implements ISession {
         } finally {
             db.closeConnection();
         }
+    }
+    @Override
+    public int GetIdSession(int idUE, int idClasse, int idCreneau){
+        String sql = "SELECT id FROM session WHERE id_ue = ? AND id_classe = ? AND id_creneau = ?";
+        db.initPrepar(sql);
+        try {
+
+            db.getPstm().setInt(1, idUE);
+            db.getPstm().setInt(2, idClasse);
+            db.getPstm().setInt(3, idCreneau);
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return 0;
+    }
+    @Override
+    public int getLastSessionId() {
+        String sql = "SELECT MAX(id) FROM session";
+        db.initPrepar(sql);
+        try {
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                return rs.getInt(1); // Récupère l'id max
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return 0;
     }
 }
 

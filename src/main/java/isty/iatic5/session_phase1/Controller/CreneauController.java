@@ -136,7 +136,7 @@ public class CreneauController {
                                 Creneau creneauExact = trouverCreneauExact(rowIndex, colIndex);
 
                                 if (creneauExact != null) {
-                                    // Appliquer le style en fonction de la liste où se trouve creneauExact
+                                    // Appliquer le style.css en fonction de la liste où se trouve creneauExact
                                     if (disponibilite.contains(creneauExact)) {
                                         setStyle("-fx-background-color: lightgreen;");
                                     } else if (update && dejaPris.contains(creneauExact)) {

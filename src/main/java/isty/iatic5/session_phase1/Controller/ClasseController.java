@@ -138,6 +138,7 @@ public class ClasseController {
         } else {
             showAlert("Erreur", "Veuillez sélectionner une Classe à supprimer.");
         }
+        loadClasses(); // Recharger les données
     }
 
     @FXML

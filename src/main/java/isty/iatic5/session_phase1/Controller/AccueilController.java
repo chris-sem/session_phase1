@@ -45,5 +45,11 @@ public class AccueilController {
         stage.show();
     }
 
+    @FXML
+    private void quitApplication() {
+        System.exit(0); // Quitte l'application
+    }
+
+
 }
 

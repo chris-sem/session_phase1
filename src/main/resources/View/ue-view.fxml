@@ -45,5 +45,5 @@
     </TableView>
 
     <!-- Bouton "Home" pour revenir à la page d'accueil -->
-    <Button text="Home" onAction="#goToHome" />
+    <Button text="Accueil" onAction="#goToHome" />
 </VBox>
