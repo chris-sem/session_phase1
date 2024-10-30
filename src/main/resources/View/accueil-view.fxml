@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox  xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.AccueilController" alignment="CENTER" spacing="10" >
+    <Button text="Gestion des Creneaux" onAction="#goToCreneau"/>
+    <Button text="Gestion des classes" onAction="#goToClasse"/>
+    <Button text="Gestion des unités d'enseignement" onAction="#goToUe"/>
+    <Button text="Gestion des sessions" onAction="#goToSession"/>
+</VBox>

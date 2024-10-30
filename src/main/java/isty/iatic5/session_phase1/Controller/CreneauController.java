@@ -1,14 +1,18 @@
 package isty.iatic5.session_phase1.Controller;
 
+import isty.iatic5.session_phase1.HelloApplication;
 import isty.iatic5.session_phase1.Model.Creneau;
 import isty.iatic5.session_phase1.Services.ISession;
 import isty.iatic5.session_phase1.Services.SessionImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
@@ -458,5 +462,15 @@ public class CreneauController {
         // Calculer le premier lundi de la semaine
         premierLundiDeLaSemaine = date.with(weekFields.dayOfWeek(), 1); // 1 correspond au lundi
     }
+    @FXML
+    private void goToHome() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
+        Parent root = loader.load();
+        // Obtenez la scène actuelle et changez-la
+        tableView.getScene().setRoot(root);
+
+    }
 }
+
 
