@@ -102,6 +102,26 @@ public class SessionController {
             // Access the Creneau object from the cell data and get its Statut
             return new SimpleStringProperty(cellData.getValue().getStatut());
         });
+
+        statusColumn.setCellFactory(column -> new TableCell<Creneau, String>() {
+            @Override
+            protected void updateItem(String status, boolean empty) {
+                super.updateItem(status, empty);
+                if (empty || status == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(status);
+                    if (status.equals("Indisponible")) {
+                        setStyle("-fx-background-color: red; -fx-text-fill: white;"); // Style pour "Réservé"
+                    } else if (status.equals("Réservé")){
+                        setStyle("-fx-background-color: orange; -fx-text-fill: white;"); // Style pour "Réservé"
+                    }else {
+                        setStyle("-fx-background-color: green; -fx-text-fill: white;"); // Style pour "Disponible"
+                    }
+                }
+            }
+        });
     }
 
 

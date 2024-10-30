@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="Retrieve availabe time slots for Ue and Classe">
+    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="Etat : disponible, indisponible et réservé">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Model/Creneau.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Model/Creneau.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/View/session-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/session-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +129,7 @@
       <workItem from="1730228594757" duration="575000" />
       <workItem from="1730229207704" duration="209000" />
       <workItem from="1730229453445" duration="2055000" />
-      <workItem from="1730279086239" duration="13506000" />
+      <workItem from="1730279086239" duration="14458000" />
     </task>
     <task id="LOCAL-00001" summary="UE and classe buttons">
       <option name="closed" value="true" />
@@ -179,7 +179,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730293002933</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Etat : disponible, indisponible et réservé">
+      <option name="closed" value="true" />
+      <created>1730294287737</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1730294287737</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,7 +211,8 @@
     <MESSAGE value="Get ids classe and Ue" />
     <MESSAGE value="retrieve id from classe and UE" />
     <MESSAGE value="Retrieve availabe time slots for Ue and Classe" />
-    <option name="LAST_COMMIT_MESSAGE" value="Retrieve availabe time slots for Ue and Classe" />
+    <MESSAGE value="Etat : disponible, indisponible et réservé" />
+    <option name="LAST_COMMIT_MESSAGE" value="Etat : disponible, indisponible et réservé" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
