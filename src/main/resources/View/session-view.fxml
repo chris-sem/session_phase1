@@ -17,11 +17,11 @@
 
     <TableView fx:id="creneauxTableView" prefHeight="200" prefWidth="600">
         <columns>
-            <TableColumn fx:id="statusColumn" text="Etat" prefWidth="100" />
-            <TableColumn fx:id="dayColumn" text="Day" prefWidth="120" />
+            <TableColumn fx:id="statusColumn" text="Etat" prefWidth="140" />
+            <TableColumn fx:id="dayColumn" text="Day" prefWidth="100" />
             <TableColumn fx:id="startTimeColumn" text="Start Time" prefWidth="100" />
             <TableColumn fx:id="endTimeColumn" text="End Time" prefWidth="100" />
-            <TableColumn fx:id="actionColumn" text="Action" prefWidth="120" />
+            <TableColumn fx:id="actionColumn" text="Action" prefWidth="160" />
         </columns>
     </TableView>
 

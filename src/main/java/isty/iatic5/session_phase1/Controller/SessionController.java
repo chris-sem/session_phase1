@@ -5,14 +5,11 @@ import isty.iatic5.session_phase1.Model.Creneau;
 import isty.iatic5.session_phase1.Model.UniteEnseignement;
 import isty.iatic5.session_phase1.Services.DBConnexion;
 import isty.iatic5.session_phase1.Services.SessionImpl;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,15 +22,8 @@ public class SessionController {
     private boolean isUEVisible = false;
     private boolean isClasseVisible = false;
 
-    @FXML
-    private ListView<String> timeSlotListView; // Add this ListView for time slots
 
-    @FXML
-    private Button ueButton;
-    @FXML
-    private Button classButton;
-    @FXML
-    private ListView<String> listView;
+
     @FXML
     private ComboBox<UniteEnseignement> ueComboBox;
     @FXML
@@ -52,12 +42,6 @@ public class SessionController {
     private TableColumn<Creneau, Void> actionColumn;
 
 
-
-
-
-
-
-
     @FXML
     private void initialize() {
 
@@ -73,12 +57,18 @@ public class SessionController {
             if (event.getClickCount() == 1) { // Single click to show available classes
                 afficherClasses(); // Populate the ComboBox with classes
             }
+            if (classComboBox.getValue() == null) {
+                creneauxTableView.getItems().clear(); // Clear the table if nothing is selected
+            }
         });
 
         // Set up the UE ComboBox to show available UE on click
         ueComboBox.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) { // Single click to show available UE
                 afficherUE(); // Populate the ComboBox with UE
+            }
+            if (ueComboBox.getValue() == null) {
+                creneauxTableView.getItems().clear(); // Clear the table if nothing is selected
             }
         });
 
@@ -148,7 +138,6 @@ public class SessionController {
                     actionLabel.setStyle("-fx-text-fill: orange; -fx-underline: true;");
                     actionLabel.setOnMouseClicked(event -> {
                         // Exemple d'identifiant de session, idUE, idClasse et idCreneau
-                        String identifiant = "session123"; // Remplacez par un identifiant unique
                         int idUE = ueComboBox.getValue().getIdUE();
                         int idClasse = classComboBox.getValue().getIdClasse();
                         int idCreneau = creneau.getIdCreneau();
@@ -161,8 +150,8 @@ public class SessionController {
                     actionLabel.setText("Créer Session");
                     actionLabel.setStyle("-fx-text-fill: green; -fx-underline: true;");
                     actionLabel.setOnMouseClicked(event -> {
-                        // Exemple d'identifiant de session, idUE, idClasse et idCreneau
-                        String identifiant = "session123"; // Remplacez par un identifiant unique
+                        int lastId = sessionService.getLastSessionId();
+                        String identifiant = "session"+ (lastId+1);  // Remplacez par un identifiant unique
                         int idUE = ueComboBox.getValue().getIdUE();
                         int idClasse = classComboBox.getValue().getIdClasse();
                         int idCreneau = creneau.getIdCreneau();
@@ -187,13 +176,6 @@ public class SessionController {
     }
 
 
-    private void supprimerSession(Creneau creneau) {
-        // Code to delete the session for the given creneau
-        System.out.println("Session supprimée pour le créneau: " + creneau);
-    }
-
-
-
     private void updateCreneaux() {
         UniteEnseignement selectedUE = ueComboBox.getValue();
         Classe selectedClass = classComboBox.getValue();
@@ -202,6 +184,7 @@ public class SessionController {
             displayAvailableCreneaux(selectedClass.getIdClasse(), selectedUE.getIdUE());
             creneauxTableView.refresh();
         }
+
     }
 
 
@@ -329,10 +312,4 @@ public class SessionController {
         return "Disponible"; // The creneau is available
     }
 
-
-
-    public void setStage(Stage stage) {
-        // Configurations supplémentaires pour la scène si nécessaire
-        stage.setTitle("Gestion des Sessions");
-    }
 }

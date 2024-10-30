@@ -388,6 +388,22 @@ public class SessionImpl implements ISession {
         }
         return 0;
     }
+
+    public int getLastSessionId() {
+        String sql = "SELECT MAX(id) FROM session";
+        db.initPrepar(sql);
+        try {
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                return rs.getInt(1); // Récupère l'id max
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return 0;
+    }
 }
 
 
