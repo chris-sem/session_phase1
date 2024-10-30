@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -74,13 +76,19 @@ public class SessionController {
 
         // Set up action for UE ComboBox
         ueComboBox.setOnAction(event -> {
-            selectedUE = ueComboBox.getValue(); // Store selected UE
+            selectedUE = ueComboBox.getValue();// Store selected UE
+            if (selectedUE != null && !(selectedUE.isEmpty())) {
+                System.out.println(getUEIdByName(selectedUE));
+            }
             checkAndDisplayTimeSlots();          // Check if both are selected
         });
 
         // Set up action for Class ComboBox
         classComboBox.setOnAction(event -> {
-            selectedClass = classComboBox.getValue(); // Store selected class
+            selectedClass = classComboBox.getValue();
+            if (selectedClass != null && !(selectedClass.isEmpty())) {
+                System.out.println(getClassIdByName(selectedClass));
+            }
             checkAndDisplayTimeSlots();               // Check if both are selected
         });
 
@@ -210,6 +218,107 @@ public class SessionController {
             dbConnexion.closeConnection();
         }
     }
+
+    private boolean isCreneauReserved(int idCreneau, int idClasse, int idUe) {
+        // Récupérer la liste de toutes les sessions
+        DBConnexion dbConnexion = new DBConnexion();
+        String sql = "SELECT id_ue, id_classe, id_creneau FROM session";
+
+        try (Connection conn = dbConnexion.getConnection(); // Supposons que DBConnexion a une méthode pour obtenir une connexion
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int reservedIdUE = rs.getInt("id_ue"); // Récupérer l'id_ue de la session
+                int reservedIdClasse = rs.getInt("id_classe"); // Récupérer l'id_classe de la session
+                int reservedIdCreneau = rs.getInt("id_creneau"); // Récupérer l'id_creneau de la session
+
+                // Vérifiez si le créneau est déjà réservé pour la classe ou l'UE
+                if ((reservedIdClasse == idClasse && reservedIdCreneau == idCreneau) ||
+                        (reservedIdUE == idUe && reservedIdCreneau == idCreneau)) {
+                    return true; // Le créneau est réservé
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Gérez les exceptions de manière appropriée
+        }
+        return false; // Le créneau est disponible
+    }
+
+    //works
+    // Method to get the ID of a UE based on its name
+    public int getUEIdByName(String ueName) {
+        int ueId = -1; // Default value if not found
+        DBConnexion dbConnexion = new DBConnexion(); // Assuming DBConnexion is your database connection class
+
+        String sql = "SELECT id FROM unite_enseignement WHERE designation = ?"; // Replace 'name' with the actual column name in your ue table
+
+        try (Connection connection = dbConnexion.getConnection(); // Get connection from your DBConnexion class
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Set the parameter for the prepared statement
+            preparedStatement.setString(1, ueName);
+
+            // Execute the query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Check if a result was returned
+            if (resultSet.next()) {
+                ueId = resultSet.getInt("id"); // Get the id from the result set
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions properly in a real application
+        }
+
+        return ueId; // Return the found ID, or -1 if not found
+    }
+
+
+
+    //works
+    public int getClassIdByName(String Spec_Prom) {
+        int classId = -1; // Default value if not found
+        DBConnexion dbConnexion = new DBConnexion(); // Assuming DBConnexion is your database connection class
+
+        // Split the display text into specialization and promotion
+        String[] parts = Spec_Prom.split(" - ");
+        if (parts.length != 2) {
+            return classId; // Invalid format, return default
+        }
+
+        String specialite = parts[0].trim(); // Get specialization
+        int promotion;
+        try {
+            promotion = Integer.parseInt(parts[1].trim()); // Parse promotion
+        } catch (NumberFormatException e) {
+            e.printStackTrace(); // Handle exception if parsing fails
+            return classId; // Return default if parsing fails
+        }
+
+        String sql = "SELECT id FROM classe WHERE specialite = ? AND promotion = ?"; // SQL query to find class by specialite and promotion
+
+        try (Connection connection = dbConnexion.getConnection(); // Get connection from your DBConnexion class
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Set parameters for the prepared statement
+            preparedStatement.setString(1, specialite); // Set the specialization
+            preparedStatement.setInt(2, promotion); // Set the promotion
+
+            // Execute the query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Check if a result was returned
+            if (resultSet.next()) {
+                classId = resultSet.getInt("id"); // Get the id from the result set
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions properly in a real application
+        }
+
+        return classId; // Return the found ID, or -1 if not found
+    }
+
+
 
     public void setStage(Stage stage) {
         // Configurations supplémentaires pour la scène si nécessaire
