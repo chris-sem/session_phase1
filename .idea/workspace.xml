@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="retrieve id from classe and UE">
+    <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="Retrieve availabe time slots for Ue and Classe">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/SessionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Model/Creneau.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Model/Creneau.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +129,7 @@
       <workItem from="1730228594757" duration="575000" />
       <workItem from="1730229207704" duration="209000" />
       <workItem from="1730229453445" duration="2055000" />
-      <workItem from="1730279086239" duration="12399000" />
+      <workItem from="1730279086239" duration="13506000" />
     </task>
     <task id="LOCAL-00001" summary="UE and classe buttons">
       <option name="closed" value="true" />
@@ -170,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730291345034</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Retrieve availabe time slots for Ue and Classe">
+      <option name="closed" value="true" />
+      <created>1730293002933</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1730293002933</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,7 +202,8 @@
     <MESSAGE value="Affichage date debut et fin creneaux" />
     <MESSAGE value="Get ids classe and Ue" />
     <MESSAGE value="retrieve id from classe and UE" />
-    <option name="LAST_COMMIT_MESSAGE" value="retrieve id from classe and UE" />
+    <MESSAGE value="Retrieve availabe time slots for Ue and Classe" />
+    <option name="LAST_COMMIT_MESSAGE" value="Retrieve availabe time slots for Ue and Classe" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

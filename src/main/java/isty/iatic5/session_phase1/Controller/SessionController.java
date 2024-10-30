@@ -99,7 +99,8 @@ public class SessionController {
         });
 
         statusColumn.setCellValueFactory(cellData -> {
-            return new SimpleStringProperty(cellData.getValue().isReserved() ? "Réservé" : "Disponible");
+            // Access the Creneau object from the cell data and get its Statut
+            return new SimpleStringProperty(cellData.getValue().getStatut());
         });
     }
 
@@ -196,7 +197,7 @@ public class SessionController {
                 LocalDateTime fin = rs.getTimestamp("fin").toLocalDateTime();
 
                 Creneau creneau = new Creneau(idCreneau, debut, fin);
-                creneau.setReserved(isCreneauReserved(idCreneau, idClasse, idUe));
+                creneau.setStatut(isCreneauReserved(idCreneau, idClasse, idUe));
                 creneauxList.add(creneau);
             }
 
@@ -210,31 +211,35 @@ public class SessionController {
         }
     }
 
-    private boolean isCreneauReserved(int idCreneau, int idClasse, int idUe) {
+    private String isCreneauReserved(int idCreneau, int idClasse, int idUe) {
         // Récupérer la liste de toutes les sessions
         DBConnexion dbConnexion = new DBConnexion();
         String sql = "SELECT id_ue, id_classe, id_creneau FROM session";
 
-        try (Connection conn = dbConnexion.getConnection(); // Supposons que DBConnexion a une méthode pour obtenir une connexion
+        try (Connection conn = dbConnexion.getConnection(); // Connection to the database
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                int reservedIdUE = rs.getInt("id_ue"); // Récupérer l'id_ue de la session
-                int reservedIdClasse = rs.getInt("id_classe"); // Récupérer l'id_classe de la session
-                int reservedIdCreneau = rs.getInt("id_creneau"); // Récupérer l'id_creneau de la session
+                int reservedIdUE = rs.getInt("id_ue");
+                int reservedIdClasse = rs.getInt("id_classe");
+                int reservedIdCreneau = rs.getInt("id_creneau");
 
-                // Vérifiez si le créneau est déjà réservé pour la classe ou l'UE
-                if ((reservedIdClasse == idClasse && reservedIdCreneau == idCreneau) ||
-                        (reservedIdUE == idUe && reservedIdCreneau == idCreneau)) {
-                    return true; // Le créneau est réservé
+                // Check if the creneau is reserved
+                if (reservedIdClasse == idClasse && reservedIdCreneau == idCreneau && reservedIdUE == idUe) {
+                    return "Réservé"; // The creneau is reserved for the same UE and Classe
+                }
+                else if ((reservedIdClasse == idClasse && reservedIdCreneau == idCreneau && reservedIdUE != idUe) ||
+                        (reservedIdUE == idUe && reservedIdCreneau == idCreneau && reservedIdClasse != idClasse)) {
+                    return "Indisponible"; // The creneau is unavailable due to conflict
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Gérez les exceptions de manière appropriée
+            e.printStackTrace(); // Handle exceptions appropriately
         }
-        return false; // Le créneau est disponible
+        return "Disponible"; // The creneau is available
     }
+
 
 
     public void setStage(Stage stage) {

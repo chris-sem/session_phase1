@@ -9,13 +9,13 @@ public class Creneau {
     private LocalDateTime fin;
     private int ligne;
     private int colonne;
-    private boolean isReserved;
+    private String Statut;
 
     public Creneau(int idCreneau, LocalDateTime debut, LocalDateTime fin) {
         this.idCreneau = idCreneau;
         this.debut = debut;
         this.fin = fin;
-        this.isReserved = false;
+        this.Statut = "Disponible";
 
         // Déterminer la colonne en fonction du jour de la semaine
         DayOfWeek dayOfWeek = debut.getDayOfWeek();
@@ -74,12 +74,12 @@ public class Creneau {
         this.colonne = colonne;
     }
 
-    public boolean isReserved() {
-        return isReserved;
+    public String getStatut() {
+        return Statut;
     }
 
-    public void setReserved(boolean reserved) {
-        this.isReserved = reserved;
+    public void setStatut(String statut) {
+        this.Statut = statut;
     }
 
     @Override
