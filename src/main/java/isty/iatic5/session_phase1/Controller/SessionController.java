@@ -283,20 +283,27 @@ public class SessionController {
         DBConnexion dbConnexion = new DBConnexion();
         String sql;
 
+        // Construire la requête SQL pour récupérer tous les créneaux
+        sql = "SELECT c.id, c.debut, c.fin, s.id_ue, s.id_classe " +
+                "FROM creneau c " +
+                "LEFT JOIN session s ON c.id = s.id_creneau " +
+                "WHERE (s.id IS NULL OR (s.id_ue = ? AND s.id_classe = ?))"; // Affiche les créneaux disponibles ou réservés pour la même UE et classe
+
+        // Ajouter un filtre de date si nécessaire
         if (selectedDate != null) {
-            // Adjust the SQL query to filter by date
-            sql = "SELECT id, debut, fin FROM creneau WHERE DATE(debut) = ?";
-        } else {
-            // Fetch all creneaux if no date is selected
-            sql = "SELECT id, debut, fin FROM creneau";
+            sql += " AND DATE(c.debut) = ?";
         }
 
         try {
             dbConnexion.initPrepar(sql);
 
-            // If a date is selected, set it in the prepared statement
+            // Initialiser les paramètres de la requête
+            dbConnexion.getPstm().setInt(1, idUe);
+            dbConnexion.getPstm().setInt(2, idClasse);
+
+            // Si une date est sélectionnée, la définir dans la requête
             if (selectedDate != null) {
-                dbConnexion.getPstm().setDate(1, java.sql.Date.valueOf(selectedDate));
+                dbConnexion.getPstm().setDate(3, java.sql.Date.valueOf(selectedDate));
             }
 
             ResultSet rs = dbConnexion.executeSelect();
@@ -307,17 +314,20 @@ public class SessionController {
                 LocalDateTime debut = rs.getTimestamp("debut").toLocalDateTime();
                 LocalDateTime fin = rs.getTimestamp("fin").toLocalDateTime();
 
+                // Créer l'objet Creneau
                 Creneau creneau = new Creneau(idCreneau, debut, fin);
-                String statut = isCreneauReserved(idCreneau, idClasse, idUe);
 
-                // Add to list only if the status is not "Indisponible"
-                if (!statut.equals("Indisponible")) {
-                    creneau.setStatut(statut);
-                    creneauxList.add(creneau);
+                // Vérifier si le créneau est réservé
+                if (rs.getObject("id_ue") != null) {
+                    creneau.setStatut("Réservé"); // Statut pour les créneaux réservés
+                } else {
+                    creneau.setStatut("Disponible"); // Statut pour les créneaux non réservés
                 }
+
+                creneauxList.add(creneau);
             }
 
-            creneauxTableView.setItems(creneauxList); // Display in TableView only available slots
+            creneauxTableView.setItems(creneauxList); // Afficher tous les créneaux avec leur statut
             rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -325,35 +335,6 @@ public class SessionController {
         } finally {
             dbConnexion.closeConnection();
         }
-    }
-
-    private String isCreneauReserved(int idCreneau, int idClasse, int idUe) {
-        // Récupérer la liste de toutes les sessions
-        DBConnexion dbConnexion = new DBConnexion();
-        String sql = "SELECT id_ue, id_classe, id_creneau FROM session";
-
-        try (Connection conn = dbConnexion.getConnection(); // Connection to the database
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                int reservedIdUE = rs.getInt("id_ue");
-                int reservedIdClasse = rs.getInt("id_classe");
-                int reservedIdCreneau = rs.getInt("id_creneau");
-
-                // Check if the creneau is reserved
-                if (reservedIdClasse == idClasse && reservedIdCreneau == idCreneau && reservedIdUE == idUe) {
-                    return "Réservé"; // The creneau is reserved for the same UE and Classe
-                }
-                else if ((reservedIdClasse == idClasse && reservedIdCreneau == idCreneau && reservedIdUE != idUe) ||
-                        (reservedIdUE == idUe && reservedIdCreneau == idCreneau && reservedIdClasse != idClasse)) {
-                    return "Indisponible"; // The creneau is unavailable due to conflict
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); // Handle exceptions appropriately
-        }
-        return "Disponible"; // The creneau is available
     }
 
 }
