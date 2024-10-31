@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" prefHeight="650.0" prefWidth="820.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isty.iatic5.session_phase1.Controller.SessionController">
+
+<!-- Section pour la Recherche des classes et UE -->
+<VBox fx:id="selectionVBox" alignment="CENTER" spacing="10">
+    <HBox alignment="CENTER" spacing="20">
+        <VBox prefHeight="112.0" prefWidth="371.0" spacing="5">
+            <Label text="Rechercher classe:" />
+            <TextField fx:id="rechercheClasseField" />
+            <TableView fx:id="classeTableView" prefHeight="79.0" prefWidth="344.0">
+                <columns>
+                    <TableColumn fx:id="classeIdColumn" prefWidth="88.66660177707672" text="IdClasse" />
+                    <TableColumn fx:id="classePromotionColumn" prefWidth="120.66674041748047" text="Promotion" />
+                    <TableColumn fx:id="classeSpecialiteColumn" prefWidth="142.00006103515625" text="Specialite" />
+                </columns>
+            </TableView>
+        </VBox>
+        <VBox spacing="5">
+            <Label text="Rechercher UE:" />
+            <TextField fx:id="rechercheUEField" />
+            <TableView fx:id="ueTableView" prefHeight="79.0" prefWidth="367.0">
+                <columns>
+                    <TableColumn fx:id="ueIdColumn" prefWidth="75.0" text="IdUE" />
+                    <TableColumn fx:id="ueCodeColumn" prefWidth="111.33333587646484" text="Code" />
+                    <TableColumn fx:id="ueDesignationColumn" prefWidth="162.0" text="Designation" />
+                </columns>
+            </TableView>
+        </VBox>
+    </HBox>
+
+    <Label fx:id="selectionClasseLabel" style="-fx-font-style: italic;" text="Classe sélectionnée: " />
+    <Label fx:id="selectionUELabel" style="-fx-font-style: italic;" text="UE sélectionnée: " />
+    <Button fx:id="gererSessionsButton" onAction="#gererSessionsButton" disable="true" style="-fx-background-color: green; -fx-text-fill: white;" text="Gérer les sessions" />
+</VBox>
+
+<!-- Conteneur pour charger la Vue des Créneaux -->
+<Pane fx:id="contentPane" />
+<!-- Bouton "Home" pour revenir à la page d'accueil -->
+<Button text="Accueil" onAction="#goToHome" />
+</VBox>
