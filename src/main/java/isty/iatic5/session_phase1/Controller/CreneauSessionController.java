@@ -1,18 +1,16 @@
 package isty.iatic5.session_phase1.Controller;
 
-import isty.iatic5.session_phase1.HelloApplication;
+import isty.iatic5.session_phase1.Model.Classe;
 import isty.iatic5.session_phase1.Model.Creneau;
+import isty.iatic5.session_phase1.Model.Session;
 import isty.iatic5.session_phase1.Services.ISession;
 import isty.iatic5.session_phase1.Services.SessionImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
@@ -20,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class CreneauController {
+public class CreneauSessionController {
 
     @FXML
     private TableView<String[]> tableView;
@@ -55,10 +53,16 @@ public class CreneauController {
     private List<Creneau> nouveauxElements_disponibilite;
     private List<Creneau> elementsManquants_disponibilite;
 
-    private boolean update = false;
+    private boolean update = true;
+    private int idClasse;
+    private int idUE;
 
     @FXML
     private void initialize() {
+
+    }
+
+    public void initializeAfterSettingValues(){
 
         double tableWidth = 630.0; // Largeur totale souhaitée pour la TableView (correspondant à 7 colonnes)
         double columnWidth = tableWidth / 7;
@@ -97,13 +101,23 @@ public class CreneauController {
                                     if (creneauExact != null) {
                                         checkModificationsButton.setDisable(false);
 
-                                        // Mode sans update : gérer uniquement la liste "disponibilite"
-                                        if (disponibilite.contains(creneauExact)) {
-                                            disponibilite.remove(creneauExact);
+                                        if (!update) {
+                                            // Mode sans update : gérer uniquement la liste "disponibilite"
+                                            if (disponibilite.contains(creneauExact)) {
+                                                disponibilite.remove(creneauExact);
+                                            } else {
+                                                disponibilite.add(creneauExact);
+                                            }
                                         } else {
-                                            disponibilite.add(creneauExact);
+                                            // Mode avec update : gérer à la fois "disponibilite" et "dejaPris"
+                                            if (disponibilite.contains(creneauExact)) {
+                                                disponibilite.remove(creneauExact);
+                                                dejaPris.add(creneauExact);
+                                            } else if (dejaPris.contains(creneauExact)) {
+                                                dejaPris.remove(creneauExact);
+                                                disponibilite.add(creneauExact);
+                                            }
                                         }
-
                                         updateTableColors();
                                     }
                                 }
@@ -154,13 +168,18 @@ public class CreneauController {
     private void setupVariables(int semaineOffset, int numSemaine, int numAnnee) {
         // Déterminer la date pivot en fonction des paramètres
         if (semaineOffset == 0) {
-
-            LocalDateTime dateTemp = sessionInterface.getMinDebutCreneau();
+            LocalDateTime dateTemp = sessionInterface.getMinDebutCreneauUtiliseParUEDansClasse(idUE, idClasse);
 
             if (dateTemp != null) {
-                datePivot = sessionInterface.getMinDebutCreneau().toLocalDate() ;
+                datePivot = dateTemp.toLocalDate() ;
             }else{
-                datePivot = LocalDate.now();
+                dateTemp = sessionInterface.getMinDebutCreneauDisponiblePourClasse(idClasse);
+
+                if (dateTemp != null) {
+                    datePivot = dateTemp.toLocalDate() ;
+                }else{
+                    datePivot = LocalDate.now();
+                }
             }
 
             //datePivot = LocalDateTime.of(2024, 10, 1, 8, 0, 0).toLocalDate();
@@ -179,15 +198,19 @@ public class CreneauController {
             throw new IllegalArgumentException("Valeur de semaineOffset invalide. Utilisez -1, 0, 1, ou 2.");
         }
 
+        if(datePivot == null){
+            datePivot = LocalDate.now();
+        }
+
         // Calcul des valeurs de semaine, année, et premier lundi basé sur la date pivot
         calculerDateSemaine(datePivot);
 
         // Mise à jour du label dynamique pour les dates de la semaine
         updateDateRangeLabel();
 
-        // Si 'update' est faux, récupérer uniquement la liste 'disponibilite'
-        disponibilite = sessionInterface.getCreneauxEntreDates(premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59)); // Méthode pour charger uniquement disponibilite
-        dejaPris = new ArrayList<>();
+        disponibilite = sessionInterface.getCreneauxDisponiblesPourClasse(idClasse, premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59));
+
+        dejaPris = sessionInterface.getCreneauxUtilisesParUEDansClasse(idUE, idClasse, premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59));
 
         // Création des copies initiales pour le suivi des modifications
         disponibiliteInitial = new ArrayList<>(disponibilite);
@@ -253,6 +276,34 @@ public class CreneauController {
         mettreAJourListesDeModifications();
     }
 
+    public List<Session> createListeSessions(int idUE, int idClasse, List<Creneau> creneaux) {
+        List<Session> sessions = new ArrayList<>();
+        for (Creneau creneau : creneaux) {
+            // Génération d'un identifiant unique pour chaque session
+            String identifiant = "UE" + idUE + "-CL" + idClasse + "-CR" + creneau.getIdCreneau();
+
+            // Création d'une nouvelle session à partir des données fournies
+            Session session = new Session(
+                    0, // idSession (pas encore défini, car il sera généré par la base de données)
+                    identifiant,
+                    idUE,
+                    "UE_CODE_DEFAULT", // Valeur par défaut pour le code de l'unité d'enseignement
+                    "UE_DESIGNATION_DEFAULT", // Valeur par défaut pour la désignation de l'unité d'enseignement
+                    idClasse,
+                    2024, // Valeur par défaut pour la promotion
+                    Classe.Specialite.MT, // Valeur par défaut pour la spécialité de la classe
+                    creneau.getIdCreneau(),
+                    creneau.getDebut() != null ? creneau.getDebut() : LocalDateTime.now(), // Valeur par défaut pour le début
+                    creneau.getFin() != null ? creneau.getFin() : LocalDateTime.now().plusHours(1) // Valeur par défaut pour la fin
+            );
+
+            // Ajout de la session créée à la liste des sessions
+            sessions.add(session);
+        }
+
+        return sessions;
+    }
+
     private void mettreAJourListesDeModifications() {
         // Nettoyer les listes de modifications
         nouveauxElements_dejaPris.clear();
@@ -284,15 +335,20 @@ public class CreneauController {
             }
         }
 
+
+        /////////////////////////////////////////////////////////////////////////////////////////
         // Afficher l'état des listes de modifications dans la console
         System.out.println("Éléments ajoutés dans dejaPris : " + nouveauxElements_dejaPris);
         System.out.println("Éléments supprimés de dejaPris : " + elementsManquants_dejaPris);
 
-        //Supprimer ce qu'il y'a a supprimer et ajouter ce qu'il y a a ajouter
+        List<Session> listeDeSessionAAjouter =  createListeSessions(idUE, idClasse, nouveauxElements_dejaPris);
+        List<Session> listeDeSessionASupprimees =  createListeSessions(idUE, idClasse, elementsManquants_dejaPris);
+
+        sessionInterface.updateSession(listeDeSessionASupprimees, listeDeSessionAAjouter);
+        /////////////////////////////////////////////////////////////////////////////////////
+
         System.out.println("Éléments ajoutés dans disponibilite : " + nouveauxElements_disponibilite);
-        sessionInterface.createMultipleCreneaux(nouveauxElements_disponibilite);
         System.out.println("Éléments supprimés de disponibilite : " + elementsManquants_disponibilite);
-        sessionInterface.deleteMultipleCreneaux(elementsManquants_disponibilite);
         System.out.println("\n");
 
         checkModificationsButton.setDisable(true);
@@ -410,14 +466,13 @@ public class CreneauController {
     public void setUpdate(boolean update) {
         this.update = update;
     }
-    @FXML
-    private void goToHome() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
-        Parent root = loader.load();
-        // Obtenez la scène actuelle et changez-la
-        tableView.getScene().setRoot(root);
-
+    public void setIdClasse(int idClasse) {
+        this.idClasse = idClasse;
     }
-}
 
+    public void setIdUE(int idUE) {
+        this.idUE = idUE;
+    }
+
+}

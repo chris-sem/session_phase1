@@ -38,7 +38,7 @@ public class AccueilController {
     private void navigateTo(String fxmlFile, ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/View/" + fxmlFile));
         Parent root = fxmlLoader.load(); // Charge le fichier FXML
-        Scene scene = new Scene(root, 900, 500);
+        Scene scene = new Scene(root, 1000, 650);
         // Récupère le stage à partir d'un des contrôles de la scène actuelle
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

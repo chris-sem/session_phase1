@@ -236,14 +236,30 @@ public class SessionImpl implements ISession {
     }
 
     @Override
-    public int updateSession(ObservableList<Integer> IdsSessionsAsupprimer, ObservableList<Session> sessionsAcreer) {
+    public int updateSession(List<Session> sessionsAsupprimer, List<Session> sessionsAcreer) {
         int result = 0;
-        for (int idSession : IdsSessionsAsupprimer) {
-            result += deleteSession(idSession);
+
+        // Suppression des sessions
+        for (Session session : sessionsAsupprimer) {
+            String sqlDelete = "DELETE FROM session WHERE id_ue = ? AND id_classe = ? AND id_creneau = ?";
+            db.initPrepar(sqlDelete);
+            try {
+                db.getPstm().setInt(1, session.getUe().getIdUE());
+                db.getPstm().setInt(2, session.getClasse().getIdClasse());
+                db.getPstm().setInt(3, session.getCreneau().getIdCreneau());
+                result += db.executeMaj();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                db.closeConnection();
+            }
         }
+
+        // Création des nouvelles sessions
         for (Session session : sessionsAcreer) {
             result += createSession(session.getIdentifiant(), session.getUe().getIdUE(), session.getClasse().getIdClasse(), session.getCreneau().getIdCreneau());
         }
+
         return result;
     }
 
@@ -430,6 +446,144 @@ public class SessionImpl implements ISession {
         }
         return 0;
     }
+    @Override
+    public LocalDateTime getMinDebutCreneauDisponiblePourClasse(int idClasse) {
+        LocalDateTime minDebut = null;
+        String sql = "SELECT MIN(debut) AS min_debut " +
+                "FROM creneau " +
+                "WHERE id NOT IN (" +
+                "SELECT id_creneau FROM session WHERE id_classe = ?)";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setInt(1, idClasse);
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                Timestamp minDebutTimestamp = rs.getTimestamp("min_debut");
+                if (minDebutTimestamp != null) {
+                    minDebut = minDebutTimestamp.toLocalDateTime();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return minDebut;
+    }
+
+    @Override
+    public LocalDateTime getMinDebutCreneauUtiliseParUEDansClasse(int idUE, int idClasse) {
+        LocalDateTime minDebut = null;
+        String sql = "SELECT MIN(c.debut) AS min_debut " +
+                "FROM creneau c " +
+                "JOIN session s ON s.id_creneau = c.id " +
+                "WHERE s.id_ue = ? AND s.id_classe = ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setInt(1, idUE);
+            db.getPstm().setInt(2, idClasse);
+            ResultSet rs = db.executeSelect();
+            if (rs.next()) {
+                Timestamp minDebutTimestamp = rs.getTimestamp("min_debut");
+                if (minDebutTimestamp != null) {
+                    minDebut = minDebutTimestamp.toLocalDateTime();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return minDebut;
+    }
+
+
+    @Override
+    public List<Creneau> getCreneauxUtilisesParUEDansClasse(int idUE, int idClasse, LocalDateTime dateDebut, LocalDateTime dateFin) {
+        List<Creneau> creneauxUtilises = new ArrayList<>();
+        String sql = "SELECT c.id, c.debut, c.fin " +
+                "FROM creneau c " +
+                "JOIN session s ON s.id_creneau = c.id " +
+                "WHERE s.id_ue = ? AND s.id_classe = ? " +
+                "AND c.debut >= ? AND c.fin <= ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setInt(1, idUE);
+            db.getPstm().setInt(2, idClasse);
+            db.getPstm().setObject(3, dateDebut);
+            db.getPstm().setObject(4, dateFin);
+            ResultSet rs = db.executeSelect();
+            while (rs.next()) {
+                creneauxUtilises.add(new Creneau(
+                        rs.getInt("id"),
+                        rs.getTimestamp("debut").toLocalDateTime(),
+                        rs.getTimestamp("fin").toLocalDateTime()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return creneauxUtilises;
+    }
+
+
+    @Override
+    public List<Creneau> getCreneauxDisponiblesPourClasse(int idClasse, LocalDateTime dateDebut, LocalDateTime dateFin) {
+        List<Creneau> creneauxDisponibles = new ArrayList<>();
+        String sql = "SELECT * FROM creneau " +
+                "WHERE id NOT IN (" +
+                "SELECT id_creneau FROM session WHERE id_classe = ?" +
+                ") AND debut >= ? AND fin <= ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setInt(1, idClasse);
+            db.getPstm().setObject(2, dateDebut);
+            db.getPstm().setObject(3, dateFin);
+            ResultSet rs = db.executeSelect();
+            while (rs.next()) {
+                creneauxDisponibles.add(new Creneau(
+                        rs.getInt("id"),
+                        rs.getTimestamp("debut").toLocalDateTime(),
+                        rs.getTimestamp("fin").toLocalDateTime()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return creneauxDisponibles;
+    }
+
+
+    @Override
+    public ObservableList<UniteEnseignement> getUniteEnseignementByClasse(int idClasse) {
+        ObservableList<UniteEnseignement> ues = FXCollections.observableArrayList();
+        String sql = "SELECT ue.id, ue.code, ue.designation " +
+                "FROM unite_enseignement ue " +
+                "JOIN session s ON s.id_ue = ue.id " +
+                "WHERE s.id_classe = ?";
+        db.initPrepar(sql);
+        try {
+            db.getPstm().setInt(1, idClasse);
+            ResultSet rs = db.executeSelect();
+            while (rs.next()) {
+                ues.add(new UniteEnseignement(
+                        rs.getInt("id"),
+                        rs.getString("code"),
+                        rs.getString("designation")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+        }
+        return ues;
+    }
+
 }
 
 

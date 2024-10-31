@@ -19,7 +19,7 @@ public interface ISession {
     public int deleteClasse(int idClasse); // --> Entraine la suppression des sessions avec cette classe
     public int createSession(String identifiant, int idUE, int idClasse, int idCreneau);
     public int deleteSession(int idSession); // Ne supprime pas les objets associés
-    public int updateSession(ObservableList<Integer> IdsSessionsAsupprimer, ObservableList<Session> sessionsAcreer);
+    public int updateSession(List<Session> sessionsAsupprimer, List<Session> sessionsAcreer);
     public int createMultipleSessions(String identifiant, int idUE, int idClasse, List<Integer> idCreneau); //Crée une session pour chaque créneau
     public ObservableList<Creneau> getCreneauxDisponibles(int idClasse); //Pour afficher les options
     public ObservableList<UniteEnseignement> getUniteEnseignement();
@@ -34,6 +34,10 @@ public interface ISession {
     public void deleteSessionsByColumn(String columnName, int columnValue);
     public int GetIdSession(int idUE, int idClasse, int idCreneau);
     public int getLastSessionId();
-
+    public ObservableList<UniteEnseignement> getUniteEnseignementByClasse(int idClasse);
+    public List<Creneau> getCreneauxDisponiblesPourClasse(int idClasse, LocalDateTime dateDebut, LocalDateTime dateFin);
+    public List<Creneau> getCreneauxUtilisesParUEDansClasse(int idUE, int idClasse, LocalDateTime dateDebut, LocalDateTime dateFin);
+    public LocalDateTime getMinDebutCreneauUtiliseParUEDansClasse(int idUE, int idClasse);
+    public LocalDateTime getMinDebutCreneauDisponiblePourClasse(int idClasse);
 
 }
