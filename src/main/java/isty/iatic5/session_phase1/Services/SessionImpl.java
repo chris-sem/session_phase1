@@ -187,12 +187,24 @@ public class SessionImpl implements ISession {
 
     @Override
     public int createClasse(int promotion, Classe.Specialite specialite) {
-        String sql = "INSERT INTO classe (promotion, specialite) VALUES (?, ?)";
-        db.initPrepar(sql);
+        // Requête pour vérifier si la classe existe déjà
+        String checkSql = "SELECT COUNT(*) FROM classe WHERE promotion = ? AND specialite = ?";
+        db.initPrepar(checkSql);
         try {
             db.getPstm().setInt(1, promotion);
             db.getPstm().setString(2, specialite.name());
-            return db.executeMaj();
+            ResultSet rs = db.getPstm().executeQuery();
+
+            // Si une classe avec ces propriétés existe déjà, on retourne sans ajouter
+            if (rs.next() && rs.getInt(1) > 0) {
+                return -1; // Indicateur que l'insertion n'a pas été faite
+            }
+            // Requête d'insertion si la classe n'existe pas
+            String sql = "INSERT INTO classe (promotion, specialite) VALUES (?, ?)";
+            db.initPrepar(sql);
+            db.getPstm().setInt(1, promotion);
+            db.getPstm().setString(2, specialite.name());
+            return db.executeMaj(); // Exécute l'insertion et retourne le résultat
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -329,7 +341,7 @@ public class SessionImpl implements ISession {
     @Override
     public ObservableList<Classe> getClasse() {
         ObservableList<Classe> classes = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM classe";
+        String sql = "SELECT * FROM classe ORDER BY id";
         db.initPrepar(sql);
         try {
             ResultSet rs = db.executeSelect();
