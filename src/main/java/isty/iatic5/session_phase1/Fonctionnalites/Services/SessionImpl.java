@@ -1,9 +1,9 @@
-package isty.iatic5.session_phase1.Services;
+package isty.iatic5.session_phase1.Fonctionnalites.Services;
 
-import isty.iatic5.session_phase1.Model.Classe;
-import isty.iatic5.session_phase1.Model.Creneau;
-import isty.iatic5.session_phase1.Model.Session;
-import isty.iatic5.session_phase1.Model.UniteEnseignement;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Classe;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Creneau;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Session;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.UniteEnseignement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

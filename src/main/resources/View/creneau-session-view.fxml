@@ -21,6 +21,13 @@
 
     <!-- Ligne avec les dates dynamiques -->
     <Label fx:id="dateRangeLabel" style="-fx-font-style: italic;" text="Semaine de lundi date_complete1 au Dimanche date_complete2" />
+   <HBox alignment="CENTER" prefHeight="45.0" prefWidth="820.0">
+      <children>
+         <Label prefHeight="17.0" prefWidth="280.0" text="Créneaux déja utilisés par la matière dans la classe " textFill="#d45555" />
+         <Label prefHeight="17.0" prefWidth="17.0" text="/" />
+         <Label prefHeight="17.0" prefWidth="130.0" text="Créneaux disponibles" textFill="#19be5b" />
+      </children>
+   </HBox>
 
     <!-- TableView (grand rectangle gris) et les labels horaires -->
     <HBox alignment="CENTER" spacing="10">

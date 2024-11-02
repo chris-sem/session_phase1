@@ -1,8 +1,6 @@
 package isty.iatic5.session_phase1.Controller;
 
-import isty.iatic5.session_phase1.HelloApplication;
-import isty.iatic5.session_phase1.Services.ISession;
-import isty.iatic5.session_phase1.Services.SessionImpl;
+import isty.iatic5.session_phase1.Application.Main;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,10 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import isty.iatic5.session_phase1.Model.Classe;
-import isty.iatic5.session_phase1.Model.UniteEnseignement;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Classe;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.UniteEnseignement;
 
 import java.io.IOException;
+
+import static isty.iatic5.session_phase1.Application.Main.sessionImpl;
 
 public class SessionController {
 
@@ -48,8 +48,6 @@ public class SessionController {
     private Button gererSessionsButton;
     @FXML
     private Pane contentPane;
-
-    private final ISession sessionInterface = new SessionImpl();
 
     private ObservableList<Classe> classeData = FXCollections.observableArrayList();
     private ObservableList<UniteEnseignement> ueData = FXCollections.observableArrayList();
@@ -110,12 +108,12 @@ public class SessionController {
     }
 
     private void loadClasseData() {
-        classeData = sessionInterface.getClasse();
+        classeData = sessionImpl.getClasse();
         classeTableView.setItems(classeData);
     }
 
     private void loadUEData() {
-        ueData = sessionInterface.getUniteEnseignement(); // Charger toutes les UEs sans filtrage par classe
+        ueData = sessionImpl.getUniteEnseignement(); // Charger toutes les UEs sans filtrage par classe
         ueTableView.setItems(ueData);
     }
 
@@ -190,7 +188,7 @@ public class SessionController {
     @FXML
     private void goToHome() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
         Parent root = loader.load();
         // Obtenez la scène actuelle et changez-la
         classeTableView.getScene().setRoot(root);

@@ -1,4 +1,4 @@
-package isty.iatic5.session_phase1.Services;
+package isty.iatic5.session_phase1.Fonctionnalites.Services;
 
 import java.sql.*;
 

@@ -1,9 +1,7 @@
 package isty.iatic5.session_phase1.Controller;
 
-import isty.iatic5.session_phase1.HelloApplication;
-import isty.iatic5.session_phase1.Model.Creneau;
-import isty.iatic5.session_phase1.Services.ISession;
-import isty.iatic5.session_phase1.Services.SessionImpl;
+import isty.iatic5.session_phase1.Application.Main;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Creneau;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +17,8 @@ import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static isty.iatic5.session_phase1.Application.Main.sessionImpl;
 
 public class CreneauController {
 
@@ -36,8 +36,6 @@ public class CreneauController {
 
     @FXML
     private Button checkModificationsButton;
-
-    private final ISession sessionInterface = new SessionImpl();
 
     private int numero_semaine;  // Contient le numéro de la semaine
     private int numero_annee;    // Contient l'année
@@ -155,10 +153,10 @@ public class CreneauController {
         // Déterminer la date pivot en fonction des paramètres
         if (semaineOffset == 0) {
 
-            LocalDateTime dateTemp = sessionInterface.getMinDebutCreneau();
+            LocalDateTime dateTemp = sessionImpl.getMinDebutCreneau();
 
             if (dateTemp != null) {
-                datePivot = sessionInterface.getMinDebutCreneau().toLocalDate() ;
+                datePivot = sessionImpl.getMinDebutCreneau().toLocalDate() ;
             }else{
                 datePivot = LocalDate.now();
             }
@@ -186,7 +184,7 @@ public class CreneauController {
         updateDateRangeLabel();
 
         // Si 'update' est faux, récupérer uniquement la liste 'disponibilite'
-        disponibilite = sessionInterface.getCreneauxEntreDates(premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59)); // Méthode pour charger uniquement disponibilite
+        disponibilite = sessionImpl.getCreneauxEntreDates(premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59)); // Méthode pour charger uniquement disponibilite
         dejaPris = new ArrayList<>();
 
         // Création des copies initiales pour le suivi des modifications
@@ -290,9 +288,9 @@ public class CreneauController {
 
         //Supprimer ce qu'il y'a a supprimer et ajouter ce qu'il y a a ajouter
         System.out.println("Éléments ajoutés dans disponibilite : " + nouveauxElements_disponibilite);
-        sessionInterface.createMultipleCreneaux(nouveauxElements_disponibilite);
+        sessionImpl.createMultipleCreneaux(nouveauxElements_disponibilite);
         System.out.println("Éléments supprimés de disponibilite : " + elementsManquants_disponibilite);
-        sessionInterface.deleteMultipleCreneaux(elementsManquants_disponibilite);
+        sessionImpl.deleteMultipleCreneaux(elementsManquants_disponibilite);
         System.out.println("\n");
 
         checkModificationsButton.setDisable(true);
@@ -413,7 +411,7 @@ public class CreneauController {
     @FXML
     private void goToHome() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
         Parent root = loader.load();
         // Obtenez la scène actuelle et changez-la
         tableView.getScene().setRoot(root);

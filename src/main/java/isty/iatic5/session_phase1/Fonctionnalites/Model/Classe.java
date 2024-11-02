@@ -1,4 +1,4 @@
-package isty.iatic5.session_phase1.Model;
+package isty.iatic5.session_phase1.Fonctionnalites.Model;
 
 public class Classe {
     private int idClasse;

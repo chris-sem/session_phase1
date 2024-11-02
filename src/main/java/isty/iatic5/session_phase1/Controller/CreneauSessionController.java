@@ -1,10 +1,8 @@
 package isty.iatic5.session_phase1.Controller;
 
-import isty.iatic5.session_phase1.Model.Classe;
-import isty.iatic5.session_phase1.Model.Creneau;
-import isty.iatic5.session_phase1.Model.Session;
-import isty.iatic5.session_phase1.Services.ISession;
-import isty.iatic5.session_phase1.Services.SessionImpl;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Classe;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Creneau;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Session;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,6 +15,8 @@ import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static isty.iatic5.session_phase1.Application.Main.sessionImpl;
 
 public class CreneauSessionController {
 
@@ -34,8 +34,6 @@ public class CreneauSessionController {
 
     @FXML
     private Button checkModificationsButton;
-
-    private final ISession sessionInterface = new SessionImpl();
 
     private int numero_semaine;  // Contient le numéro de la semaine
     private int numero_annee;    // Contient l'année
@@ -168,12 +166,12 @@ public class CreneauSessionController {
     private void setupVariables(int semaineOffset, int numSemaine, int numAnnee) {
         // Déterminer la date pivot en fonction des paramètres
         if (semaineOffset == 0) {
-            LocalDateTime dateTemp = sessionInterface.getMinDebutCreneauUtiliseParUEDansClasse(idUE, idClasse);
+            LocalDateTime dateTemp = sessionImpl.getMinDebutCreneauUtiliseParUEDansClasse(idUE, idClasse);
 
             if (dateTemp != null) {
                 datePivot = dateTemp.toLocalDate() ;
             }else{
-                dateTemp = sessionInterface.getMinDebutCreneauDisponiblePourClasse(idClasse);
+                dateTemp = sessionImpl.getMinDebutCreneauDisponiblePourClasse(idClasse);
 
                 if (dateTemp != null) {
                     datePivot = dateTemp.toLocalDate() ;
@@ -208,9 +206,9 @@ public class CreneauSessionController {
         // Mise à jour du label dynamique pour les dates de la semaine
         updateDateRangeLabel();
 
-        disponibilite = sessionInterface.getCreneauxDisponiblesPourClasse(idClasse, premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59));
+        disponibilite = sessionImpl.getCreneauxDisponiblesPourClasse(idClasse, premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59));
 
-        dejaPris = sessionInterface.getCreneauxUtilisesParUEDansClasse(idUE, idClasse, premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59));
+        dejaPris = sessionImpl.getCreneauxUtilisesParUEDansClasse(idUE, idClasse, premierLundiDeLaSemaine.atTime(0,0), premierLundiDeLaSemaine.plusDays(6).atTime(23,59));
 
         // Création des copies initiales pour le suivi des modifications
         disponibiliteInitial = new ArrayList<>(disponibilite);
@@ -344,7 +342,7 @@ public class CreneauSessionController {
         List<Session> listeDeSessionAAjouter =  createListeSessions(idUE, idClasse, nouveauxElements_dejaPris);
         List<Session> listeDeSessionASupprimees =  createListeSessions(idUE, idClasse, elementsManquants_dejaPris);
 
-        sessionInterface.updateSession(listeDeSessionASupprimees, listeDeSessionAAjouter);
+        sessionImpl.updateSession(listeDeSessionASupprimees, listeDeSessionAAjouter);
         /////////////////////////////////////////////////////////////////////////////////////
 
         System.out.println("Éléments ajoutés dans disponibilite : " + nouveauxElements_disponibilite);

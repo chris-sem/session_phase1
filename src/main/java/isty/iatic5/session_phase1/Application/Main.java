@@ -1,5 +1,6 @@
-package isty.iatic5.session_phase1;
+package isty.iatic5.session_phase1.Application;
 
+import isty.iatic5.session_phase1.Fonctionnalites.Services.SessionImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,11 +8,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
+
+    public static SessionImpl sessionImpl;
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/View/accueil-view.fxml"));
-        //Taille de la fenêtre
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/View/accueil-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 750);
         stage.setTitle("Accueil");
         stage.setScene(scene);
@@ -19,7 +22,7 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello World, depuis develop_archi : tire ta branche avant de dev !");
+        sessionImpl = new SessionImpl();
         launch();
     }
 }

@@ -1,22 +1,20 @@
 package isty.iatic5.session_phase1.Controller;
 
-import isty.iatic5.session_phase1.HelloApplication;
-import isty.iatic5.session_phase1.Model.UniteEnseignement;
-import isty.iatic5.session_phase1.Services.ISession;
-import isty.iatic5.session_phase1.Services.SessionImpl;
+import isty.iatic5.session_phase1.Application.Main;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.UniteEnseignement;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+
+import static isty.iatic5.session_phase1.Application.Main.sessionImpl;
 
 public class UeController {
 
@@ -36,8 +34,6 @@ public class UeController {
     @FXML
     private TextField designation;
 
-    // Instance de la classe implémentant l'interface ISession
-    private final ISession sessionService = new SessionImpl();
     // Liste observable pour stocker les UE
     private ObservableList<UniteEnseignement> ueList = FXCollections.observableArrayList();
 
@@ -55,7 +51,7 @@ public class UeController {
         }
 
         // Appel à la méthode createUE
-        int result = sessionService.createUE(codeValue, designationValue);
+        int result = sessionImpl.createUE(codeValue, designationValue);
 
         // Vérification du résultat de l'opération
         if (result == -1) {
@@ -92,7 +88,7 @@ public class UeController {
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response == buttonTypeOK) {
                     // Si l'utilisateur confirme, on procède à la suppression
-                    int result = sessionService.deleteUE(selectedUE.getIdUE());
+                    int result = sessionImpl.deleteUE(selectedUE.getIdUE());
 
                     if (result > 0) {
                         ueList.remove(selectedUE); // Supprime de la liste observable pour actualiser la table
@@ -134,7 +130,7 @@ public class UeController {
     // Méthode pour charger les UE et les afficher dans le TableView
     private void loadUEData() {
         // Récupération des données des UE
-        List<UniteEnseignement> ueData = sessionService.getAllUEs();
+        List<UniteEnseignement> ueData = sessionImpl.getAllUEs();
         if (ueData != null) {
             ueList.setAll(ueData); // Actualise la ObservableList avec les nouvelles données
             ueTableView.setItems(ueList); // Lie la liste à la TableView
@@ -147,7 +143,7 @@ public class UeController {
     @FXML
     private void goToHome() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
         Parent root = loader.load();
         // Obtenez la scène actuelle et changez-la
         ueTableView.getScene().setRoot(root);

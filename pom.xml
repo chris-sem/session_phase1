@@ -65,7 +65,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>isty.iatic5.session_phase1/isty.iatic5.session_phase1.HelloApplication
+                            <mainClass>isty.iatic5.session_phase1/isty.iatic5.session_phase1.Application.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

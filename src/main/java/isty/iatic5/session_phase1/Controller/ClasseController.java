@@ -1,6 +1,6 @@
 package isty.iatic5.session_phase1.Controller;
 
-import isty.iatic5.session_phase1.HelloApplication;
+import isty.iatic5.session_phase1.Application.Main;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,20 +8,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
-import java.sql.*;
-import java.util.Arrays;
-import javafx.collections.FXCollections;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import isty.iatic5.session_phase1.Services.ISession;
-import isty.iatic5.session_phase1.Services.SessionImpl;
-import isty.iatic5.session_phase1.Model.Classe;
-import isty.iatic5.session_phase1.Model.Classe.Specialite;
-import javafx.scene.control.cell.PropertyValueFactory;
+import isty.iatic5.session_phase1.Fonctionnalites.Model.Classe;
+
+import static isty.iatic5.session_phase1.Application.Main.sessionImpl;
 
 public class ClasseController {
     @FXML
@@ -45,7 +40,7 @@ public class ClasseController {
     //private ComboBox<String> specialiteComboBox;
 
     private ObservableList<Classe> classeList = FXCollections.observableArrayList();
-    private final SessionImpl sessionImpl = new SessionImpl();
+
 
     @FXML
     public void initialize() {
@@ -147,7 +142,7 @@ public class ClasseController {
     @FXML
     private void goToHome() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/View/accueil-view.fxml")); // Remplacez par le chemin réel de la vue d'accueil
         Parent root = loader.load();
         // Obtenez la scène actuelle et changez-la
         tableClasse.getScene().setRoot(root);

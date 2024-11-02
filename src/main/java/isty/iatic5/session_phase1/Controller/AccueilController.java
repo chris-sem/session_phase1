@@ -1,6 +1,6 @@
 package isty.iatic5.session_phase1.Controller;
 
-import isty.iatic5.session_phase1.HelloApplication;
+import isty.iatic5.session_phase1.Application.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,7 +36,7 @@ public class AccueilController {
     }
 
     private void navigateTo(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/View/" + fxmlFile));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/View/" + fxmlFile));
         Parent root = fxmlLoader.load(); // Charge le fichier FXML
         Scene scene = new Scene(root, 1000, 750);
         // Récupère le stage à partir d'un des contrôles de la scène actuelle
