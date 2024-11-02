@@ -58,7 +58,9 @@ public class UeController {
         int result = sessionService.createUE(codeValue, designationValue);
 
         // Vérification du résultat de l'opération
-        if (result != -1) {
+        if (result == -1) {
+            showAlert("Erreur", "Une unité d'enseignement avec ce code et cette désignation existe déjà.");
+        } else if (result > 0) {
             loadUEData();  // Actualise les données dans la TableView
             showAlert("Succès", "Unité d'Enseignement créée avec succès!");
             code.clear();

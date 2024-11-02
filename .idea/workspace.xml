@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/CreneauController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/CreneauController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/ISession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/UeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Controller/UeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Services/SessionImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +48,7 @@
     "Application.HelloApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "noonman__dev",
+    "git-widget-placeholder": "sletter__feature1",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/semje/IdeaProjects/session_phase1",
     "node.js.detected.package.eslint": "true",

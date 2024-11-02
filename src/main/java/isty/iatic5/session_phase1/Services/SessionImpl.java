@@ -102,12 +102,29 @@ public class SessionImpl implements ISession {
 
     @Override
     public int createUE(String code, String designation) {
-        String sql = "INSERT INTO unite_enseignement (code, designation) VALUES (?, ?)";
-        db.initPrepar(sql);
         try {
+            // Vérification de l'existence de l'UE
+            String checkSql = "SELECT id FROM unite_enseignement WHERE code = ? AND designation = ?";
+            db.initPrepar(checkSql);
+            db.getPstm().setString(1, code);
+            db.getPstm().setString(2, designation);
+            ResultSet rs = db.executeSelect();
+
+            if (rs.next()) {
+                // L'UE existe déjà, on informe et on retourne -1 pour indiquer que l'UE existe
+                System.out.println("L'unité d'enseignement avec le code " + code + " et la désignation " + designation + " existe déjà.");
+                rs.close();
+                return -1;
+            }
+            rs.close(); // Fermer le ResultSet après utilisation
+
+            // Requête pour insérer la nouvelle UE si elle n'existe pas
+            String sql = "INSERT INTO unite_enseignement (code, designation) VALUES (?, ?)";
+            db.initPrepar(sql);
             db.getPstm().setString(1, code);
             db.getPstm().setString(2, designation);
             return db.executeMaj();
+
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
