@@ -197,7 +197,7 @@ public class SessionImpl implements ISession {
 
             // Si une classe avec ces propriétés existe déjà, on retourne sans ajouter
             if (rs.next() && rs.getInt(1) > 0) {
-                return -1; // Indicateur que l'insertion n'a pas été faite
+                return -2; // Indicateur que l'insertion n'a pas été faite
             }
             // Requête d'insertion si la classe n'existe pas
             String sql = "INSERT INTO classe (promotion, specialite) VALUES (?, ?)";
