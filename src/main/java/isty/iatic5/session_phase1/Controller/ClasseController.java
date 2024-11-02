@@ -90,12 +90,15 @@ public class ClasseController {
         }
         int result = sessionImpl.createClasse(promotionInt, specialite);
         // Vérification du résultat de l'opération
-        if (result != -1) {
+        if (result > -1) {
             loadClasses();  // Actualise les données dans la TableView
             showAlert("Succès", "Classe créée avec succès!");
             promotionField.clear();
             specialiteComboBox.setValue(null);
-        } else {
+        } else if (result == -2) {
+            showAlert("Erreur", "La classe que vous souhaitez créer existe déja.");
+        }
+        else {
             showAlert("Erreur", "Échec de la création de la Classe.");
         }
         // Ajout de la classe à la base de données
