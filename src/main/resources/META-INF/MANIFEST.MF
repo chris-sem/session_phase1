@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: isty.iatic5.session_phase1.Application.Main
+
