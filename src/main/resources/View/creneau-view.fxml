@@ -51,7 +51,7 @@
          </padding>
         </VBox>
         <!-- TableView avec les créneaux -->
-        <TableView fx:id="tableView" prefHeight="320" prefWidth="633">
+        <TableView fx:id="tableView" prefHeight="320" prefWidth="633" minHeight="320" maxHeight="320" minWidth="633" maxWidth="633">
             <VBox.margin>
                 <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
             </VBox.margin>

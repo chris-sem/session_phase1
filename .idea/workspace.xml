@@ -12,7 +12,6 @@
     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Fonctionnalites/Services/DBConnexion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Fonctionnalites/Services/DBConnexion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/View/creneau-session-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/creneau-session-view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,9 +74,11 @@
       <recent name="isty.iatic5.session_phase1.Services" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\semje\IdeaProjects\session_phase1\src\main\resources\View" />
-      <recent name="C:\Users\semje\IdeaProjects\session_phase1\src\main\resources" />
-      <recent name="C:\Users\semje\IdeaProjects\session_phase1\src\main\resources\isty\iatic5\session_phase1\View" />
+      <recent name="C:\Users\semje\IdeaProjects\Livrable_projet_archi\session_phase1" />
+      <recent name="C:\Users\semje\IdeaProjects\Livrable_projet_archi\session_phase1\src" />
+      <recent name="C:\Users\semje\IdeaProjects\Livrable_projet_archi\session_phase1\src\main\java\isty\iatic5\session_phase1" />
+      <recent name="C:\Users\semje\IdeaProjects\Livrable_projet_archi\session_phase1\src\main\java\isty\iatic5\session_phase1\Fonctionnalites" />
+      <recent name="C:\Users\semje\IdeaProjects\Livrable_projet_archi\session_phase1\src\main\java\isty\iatic5\session_phase1\Fonctionnalites\Services" />
     </key>
   </component>
   <component name="RunManager">
@@ -126,6 +127,7 @@
       <workItem from="1730648001361" duration="54000" />
       <workItem from="1730648214016" duration="13731000" />
       <workItem from="1731748267467" duration="15896000" />
+      <workItem from="1731772507633" duration="5752000" />
     </task>
     <servers />
   </component>
