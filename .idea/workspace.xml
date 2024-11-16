@@ -11,9 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9c98d71b-1940-41d2-985d-4e4910d769cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_projet.bat" beforeDir="false" afterPath="$PROJECT_DIR$/run_projet.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Fonctionnalites/Services/DBConnexion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isty/iatic5/session_phase1/Fonctionnalites/Services/DBConnexion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/View/creneau-session-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/creneau-session-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/View/creneau-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,6 +122,10 @@
       <workItem from="1730626880268" duration="9790000" />
       <workItem from="1730638888335" duration="85000" />
       <workItem from="1730638982236" duration="5048000" />
+      <workItem from="1730647414763" duration="566000" />
+      <workItem from="1730648001361" duration="54000" />
+      <workItem from="1730648214016" duration="13731000" />
+      <workItem from="1731748267467" duration="15896000" />
     </task>
     <servers />
   </component>

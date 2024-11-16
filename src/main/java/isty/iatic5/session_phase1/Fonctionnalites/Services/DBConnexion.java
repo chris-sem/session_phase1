@@ -25,7 +25,7 @@ public class DBConnexion {
             //Class.forName("com.mysql.jdbc.Driver");
             //On essaie d'ouvrir la connexion
             cnx = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected to the database successfully");
+            //System.out.println("Connected to the database successfully");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class DBConnexion {
         try {
             if(cnx != null){
                 cnx.close();
-                System.out.println("Connection closed successfully");
+                //System.out.println("Connection closed successfully");
             }
         } catch (Exception e){
             e.printStackTrace();

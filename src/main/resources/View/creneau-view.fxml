@@ -44,10 +44,10 @@
             <Label prefHeight="30.0" prefWidth="69.0" text="17:00 - 18:00" />
             <Label prefHeight="30.0" prefWidth="69.0" text="18:00 - 19:00" />
          <HBox.margin>
-            <Insets bottom="17.0" top="25.0" />
+            <Insets bottom="17.0" top="12.0" />
          </HBox.margin>
          <padding>
-            <Insets bottom="10.0" top="2.0" />
+            <Insets bottom="12.0" top="2.0" />
          </padding>
         </VBox>
         <!-- TableView avec les créneaux -->
